@@ -1,12 +1,13 @@
 % plotbands: calculates and plots the energy of conduction and valence bands, 
 % plus the Fermi levels.
-% nameX - Name for material X, present for user convenience
-% E_eaX - Electron affinity for material X
-% E_gX  - Band gap for material X
-% ccX   - Carrier concentration for material X
-%         Positive for p-type
-%         Negative for n-type
-function plotbands(name1, E_ea1, E_g1, cc1, name2, E_ea2, E_g2, cc2)
+% All variables are 1D matricies with length of 2.
+% Index (1, 1) is for p-type material.
+% Index (1, 2) is for n-type material.
+% name - Name for material, present for user convenience
+% E_ea - Electron affinity
+% E_g  - Band gap
+% cc   - Carrier concentration
+function plotbands(names, E_ea, E_g, cc)
 % BEGIN CALCULATION
 
 % E_valX - energy of valence band in material X
@@ -20,19 +21,17 @@ E_vac = 0;
 % passed in:
 % E_electron_affinity = E_vacuum - E_conduction
 % TODO: this might be easier / less stupid with matrix math
-E_cnd1 = E_vac - E_ea1;
-E_cnd2 = E_vac - E_ea2;
+E_cnd = E_vac - E_ea
 
 % Calculate valence bands based on equation and E_cndX calculation and data
 % passed in:
 % Econduction - Evalence = Egap
-E_val1 = E_cnd1 - E_g1;
-E_val2 = E_cnd2 - E_g2;
+E_val = E_cnd - E_g
 
 % Calculate Fermi levels
 % TODO look in book to find out how to do this. carrier concentration?
-E_fermi1 = -5.4;
-E_fermi2 = -4.9;
+E_fermi(1, 1) = -5.4
+E_fermi(1, 2) = -4.9
 
 
 % BEGIN DRAWING
@@ -48,8 +47,9 @@ stop = 1.5;	% X location to stop plotting the diagram
 % * 1/3 of the space left empty
 % * 1/3 of the space for material 2
 width = stop - start;
-xrange1 = [start,                  start + 1 * (width/3) ];
-xrange2 = [start + 2 * (width/3),  stop                  ];
+
+xrange(:, 1) = [start,                  start + 1 * (width/3) ];
+xrange(:, 2) = [start + 2 * (width/3),  stop                  ];
 
 % MATLAB lets you specify a third argument in each set, which is a string that 
 % may specify line style, color, data markers, or some combination of those.
@@ -60,17 +60,17 @@ E_fermi_style = '--';	% dashed line
 % MATLAB lets you specify a third argument in each set if you want to change the
 % style of just that line.
 plot(...
-	xrange1, [E_val1,   E_val1], ...
-	xrange1, [E_cnd1,   E_cnd1], ...
-	xrange1, [E_fermi1, E_fermi1], E_fermi_style ...
+	xrange(:, 1), [E_val(1, 1),   E_val(1, 1)], ...
+	xrange(:, 1), [E_cnd(1, 1),   E_cnd(1, 1)], ...
+	xrange(:, 1), [E_fermi(1, 1), E_fermi(1, 1)], E_fermi_style ...
 )
 % Subsequent plot commands will modify the figure instead of replacing it.
 hold on
 % Add material 2 to the figure
 plot(...
-	xrange2, [E_val2, E_val2], ...
-	xrange2, [E_cnd2, E_cnd2], ...
-	xrange2, [E_fermi2, E_fermi2], E_fermi_style ...
+	xrange(:, 2), [E_val(1, 2),   E_val(1, 2)], ...
+	xrange(:, 2), [E_cnd(1, 2),   E_cnd(1, 2)], ...
+	xrange(:, 2), [E_fermi(1, 2), E_fermi(1, 2)], E_fermi_style ...
 )
 
 % Set window range
@@ -80,7 +80,8 @@ plot(...
 % are placed horizontally on the border of the figure.
 
 % Make a matrix of the y values for convenience.
-yvalues = [E_val1, E_cnd1, E_fermi1, E_val2, E_cnd2, E_fermi2];
+yvalues = [E_val(1, 1), E_cnd(1, 1), E_fermi(1, 1), ...
+           E_val(1, 2), E_cnd(1, 2), E_fermi(1, 2)];
 % Set the window range
 axis([ ...
 	start - 1,         stop + 1,        ... % xmin, xmax
@@ -91,7 +92,7 @@ axis([ ...
 % TODO
 
 % Add x-axis label
-xlabel('Position ()')
+xlabel('Position (unit?)')	% TODO
 
 % Add y-axis label
 ylabel('Energy (eV)')
