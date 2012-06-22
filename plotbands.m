@@ -29,10 +29,24 @@ E_cnd = E_vac - E_ea
 E_val = E_cnd - E_g
 
 % Calculate Fermi levels
-% TODO look in book to find out how to do this. carrier concentration?
-E_fermi(1, 1) = -5.4
-E_fermi(1, 2) = -4.9
 
+% Prerequisite: Calculate kT. This is a global value.
+% Assuming room temperature. According to _Solid State Electronic Devices_
+% pg. 89, that makes kT 0.026 eV.
+% Note: If temperature becomes variable in the future, then this should be
+% refactored to separate k and T into two variables.
+kT = 0.026
+
+% Prerequisite: Calculate the effective density of states.
+% Based on _Solid State Electronic Devices_, equation 3-16a.
+%N(1, 1) = 
+%N(1, 2) = 
+N = [1, 1]	% TODO: fix this stupidity
+
+% Calculate Fermi level from the prerequisites.
+% Based on _Solid State Electronic Devices_, equation 3-15.
+% Note: In MATLAB, log() is the natural logarithm, not the common logarithm.
+E_fermi = kT * log(cc / N) + E_cnd
 
 % BEGIN DRAWING
 
