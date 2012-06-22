@@ -46,7 +46,7 @@ N = [1, 1]	% TODO: fix this stupidity
 % Calculate Fermi level from the prerequisites.
 % Based on _Solid State Electronic Devices_, equation 3-15.
 % Note: In MATLAB, log() is the natural logarithm, not the common logarithm.
-E_fermi = kT * log(cc / N) + E_cnd
+E_fermi = kT * log(cc ./ N) + E_cnd
 
 % BEGIN DRAWING
 
