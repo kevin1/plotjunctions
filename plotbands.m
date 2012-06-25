@@ -3,11 +3,12 @@
 % All variables are 1D matricies with length of 2.
 % Index (1, 1) is for p-type material.
 % Index (1, 2) is for n-type material.
-% name - Name for material, present for user convenience
-% E_ea - Electron affinity
-% E_g  - Band gap
-% cc   - Carrier concentration
-function plotbands(names, E_ea, E_g, cc)
+% name        - Name for material, present for user convenience
+% E_ea        - Electron affinity
+% E_g         - Band gap
+% cc          - Carrier concentration
+% effectmass  - Effective mass, either Mp or Mn.
+function plotbands(names, E_ea, E_g, cc, effectmass)
 % BEGIN CALCULATION
 
 % E_valX - energy of valence band in material X
@@ -38,15 +39,13 @@ E_val = E_cnd - E_g
 kT = 0.026
 
 % Prerequisite: Calculate the effective density of states.
-% Based on _Solid State Electronic Devices_, equation 3-16a.
-%N(1, 1) = 
-%N(1, 2) = 
-N = [1, 1]	% TODO: fix this stupidity
+N = calcDensityStates(effectmass, kT)
 
 % Calculate Fermi level from the prerequisites.
 % Based on _Solid State Electronic Devices_, equation 3-15.
 % Note: In MATLAB, log() is the natural logarithm, not the common logarithm.
-E_fermi = kT * log(cc ./ N) + E_cnd
+E_fermi(1, 1) = E_val(1, 1) - kT * log(cc(1, 1) / N(1, 1))	% p-type
+E_fermi(1, 2) = kT * log(cc(1, 2) / N(1, 2)) + E_cnd(1, 2)	% n-type
 
 % BEGIN DRAWING
 
@@ -110,5 +109,17 @@ xlabel('Position (unit?)')	% TODO
 
 % Add y-axis label
 ylabel('Energy (eV)')
+
+end
+
+function N = calcDensityStates(M, kT)
+%CALCDENSITYSTATES Summary of this function goes here
+%   Detailed explanation goes here
+
+% Planck's constant, 4.135668x10^-15 eV s, from Wolfram|Alpha.
+planck = 4.135668e-15;
+
+% Based on _Solid State Electronic Devices_, equations 3-16a and 3-20.
+N = 2 * ( (2 .* pi .* M .* kT) / (planck ^ 2) ) .^ (3/2)
 
 end
