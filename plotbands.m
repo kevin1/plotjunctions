@@ -37,9 +37,11 @@ E_val = E_cnd - E_g
 % Note: If temperature becomes variable in the future, then this should be
 % refactored to separate k and T into two variables.
 kT = 0.026
+% TODO: separate the different units of kT
+% TODO: document where the J kT came from
 
 % Prerequisite: Calculate the effective density of states.
-N = calcDensityStates(effectmass, kT)
+N = calcDensityStates(effectmass, 4.14195e-21)
 
 % Calculate Fermi level from the prerequisites.
 % Based on _Solid State Electronic Devices_, equation 3-15.
@@ -110,6 +112,8 @@ xlabel('Position (unit?)')	% TODO
 % Add y-axis label
 ylabel('Energy (eV)')
 
+E_cnd(1, 2) - E_fermi(1, 2)
+
 end
 
 function N = calcDensityStates(M, kT)
@@ -117,9 +121,16 @@ function N = calcDensityStates(M, kT)
 %   Detailed explanation goes here
 
 % Planck's constant, 4.135668x10^-15 eV s, from Wolfram|Alpha.
-planck = 4.135668e-15;
+%planck = 4.135668e-15;
+
+% Planck's constant, 6.63x10^-34 J-s, from _Solid State Electronic Devices_,
+% page 40.
+planck = 6.63e-34;
 
 % Based on _Solid State Electronic Devices_, equations 3-16a and 3-20.
 N = 2 * ( (2 .* pi .* M .* kT) / (planck ^ 2) ) .^ (3/2)
+
+% N is in m^-3, so we convert to cm^-3.
+N = N / (100 ^ 3)
 
 end
