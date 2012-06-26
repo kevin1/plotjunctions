@@ -11,8 +11,8 @@
 function plotbands(names, E_ea, E_g, cc, effectmass)
 % BEGIN CALCULATION
 
-% E_valX - energy of valence band in material X
-% E_cndX - energy of conduction band in material X
+% E_val - energy of valence band
+% E_cnd - energy of conduction band
 
 % Assuming that global vacuum energy is 0 eV because the materials haven't
 % touched yet.
@@ -21,13 +21,12 @@ E_vac = 0;
 % Calculate conduction bands based on E_vac assumption, equation, and data
 % passed in:
 % E_electron_affinity = E_vacuum - E_conduction
-% TODO: this might be easier / less stupid with matrix math
-E_cnd = E_vac - E_ea
+E_cnd = E_vac - E_ea;
 
 % Calculate valence bands based on equation and E_cndX calculation and data
 % passed in:
 % Econduction - Evalence = Egap
-E_val = E_cnd - E_g
+E_val = E_cnd - E_g;
 
 % Calculate Fermi levels
 
@@ -37,28 +36,28 @@ E_val = E_cnd - E_g
 
 % Assuming room temperature. According to _Solid State Electronic Devices_
 % pg. 89, that makes kT 0.026 eV.
-kT_eV = 0.026
+kT_eV = 0.026;
 % From Wolfram|Alpha. Query was "Boltzmann constant * 300 K in J." I used
 % 300 K because that's the value _Solid State Electronic Devices_ assumed
 % for room temperature.
-kT_J = 4.14195e-21
+kT_J = 4.14195e-21;
 
 % Mass of an electron in kg.
 % From Wolfram|Alpha.
-electronMass = 9.10938e-31
+electronMass = 9.10938e-31;
 % Multiplying the effective mass by the electron mass is the correct way to
 % get the M* term. See references in function calcDensityStates() for an
 % explanation.
-effectmass = effectmass * electronMass
+effectmass = effectmass * electronMass;
 
 % Prerequisite: Calculate the effective density of states.
-N = calcDensityStates(effectmass, kT_J)
+N = calcDensityStates(effectmass, kT_J);
 
 % Calculate Fermi level from the prerequisites.
 % Based on _Solid State Electronic Devices_, equation 3-15.
 % Note: In MATLAB, log() is the natural logarithm, not the common logarithm.
-E_fermi(1, 1) = E_val(1, 1) - kT_eV * log(cc(1, 1) / N(1, 1))	% p-type
-E_fermi(1, 2) = kT_eV * log(cc(1, 2) / N(1, 2)) + E_cnd(1, 2)	% n-type
+E_fermi(1, 1) = E_val(1, 1) - kT_eV * log(cc(1, 1) / N(1, 1));	% p-type
+E_fermi(1, 2) = kT_eV * log(cc(1, 2) / N(1, 2)) + E_cnd(1, 2);	% n-type
 
 % BEGIN DRAWING
 
@@ -123,25 +122,20 @@ xlabel('Position (unit?)')	% TODO
 % Add y-axis label
 ylabel('Energy (eV)')
 
-E_cnd(1, 2) - E_fermi(1, 2)
-
 end
 
 function N = calcDensityStates(M, kT)
 %CALCDENSITYSTATES Summary of this function goes here
 %   Detailed explanation goes here
 
-% Planck's constant, 4.135668x10^-15 eV s, from Wolfram|Alpha.
-%planck = 4.135668e-15;
-
 % Planck's constant, 6.63x10^-34 J-s, from _Solid State Electronic Devices_,
 % page 40.
 planck = 6.63e-34;
 
 % Based on _Solid State Electronic Devices_, equations 3-16a and 3-20.
-N = 2 * ( (2 .* pi .* M .* kT) / (planck ^ 2) ) .^ (3/2)
+N = 2 * ( (2 .* pi .* M .* kT) / (planck ^ 2) ) .^ (3/2);
 
 % N is in m^-3, so we convert to cm^-3.
-N = N / (100 ^ 3)
+N = N / (100 ^ 3);
 
 end
