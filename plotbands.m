@@ -4,10 +4,10 @@
 % Index (1, 1) is for p-type material.
 % Index (1, 2) is for n-type material.
 % name        - Name for material, present for user convenience
-% E_ea        - Electron affinity
-% E_g         - Band gap
-% cc          - Carrier concentration
-% effectmass  - Effective mass, either Mp or Mn.
+% E_ea        - Electron affinity (eV)
+% E_g         - Band gap (eV)
+% cc          - Carrier concentration (cm^-3)
+% effectmass  - Effective mass, either Mp or Mn. (no units. don't include M_0)
 function plotbands(names, E_ea, E_g, cc, effectmass)
 % BEGIN CALCULATION
 
@@ -31,23 +31,34 @@ E_val = E_cnd - E_g
 
 % Calculate Fermi levels
 
-% Prerequisite: Calculate kT. This is a global value.
-% Assuming room temperature. According to _Solid State Electronic Devices_
-% pg. 89, that makes kT 0.026 eV.
+% Prerequisite: Calculate kT in both eV and J. This is a global value.
 % Note: If temperature becomes variable in the future, then this should be
 % refactored to separate k and T into two variables.
-kT = 0.026
-% TODO: separate the different units of kT
-% TODO: document where the J kT came from
+
+% Assuming room temperature. According to _Solid State Electronic Devices_
+% pg. 89, that makes kT 0.026 eV.
+kT_eV = 0.026
+% From Wolfram|Alpha. Query was "Boltzmann constant * 300 K in J." I used
+% 300 K because that's the value _Solid State Electronic Devices_ assumed
+% for room temperature.
+kT_J = 4.14195e-21
+
+% Mass of an electron in kg.
+% From Wolfram|Alpha.
+electronMass = 9.10938e-31
+% Multiplying the effective mass by the electron mass is the correct way to
+% get the M* term. See references in function calcDensityStates() for an
+% explanation.
+effectmass = effectmass * electronMass
 
 % Prerequisite: Calculate the effective density of states.
-N = calcDensityStates(effectmass, 4.14195e-21)
+N = calcDensityStates(effectmass, kT_J)
 
 % Calculate Fermi level from the prerequisites.
 % Based on _Solid State Electronic Devices_, equation 3-15.
 % Note: In MATLAB, log() is the natural logarithm, not the common logarithm.
-E_fermi(1, 1) = E_val(1, 1) - kT * log(cc(1, 1) / N(1, 1))	% p-type
-E_fermi(1, 2) = kT * log(cc(1, 2) / N(1, 2)) + E_cnd(1, 2)	% n-type
+E_fermi(1, 1) = E_val(1, 1) - kT_eV * log(cc(1, 1) / N(1, 1))	% p-type
+E_fermi(1, 2) = kT_eV * log(cc(1, 2) / N(1, 2)) + E_cnd(1, 2)	% n-type
 
 % BEGIN DRAWING
 
