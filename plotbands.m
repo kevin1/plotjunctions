@@ -1,14 +1,13 @@
 % plotbands: calculates and plots the energy of conduction and valence bands, 
 % plus the Fermi levels.
 % All variables are 1D matricies with length of 2.
-% Index (1, 1) is for p-type material.
-% Index (1, 2) is for n-type material.
 % name        - Name for material, present for user convenience
 % E_ea        - Electron affinity (eV)
 % E_g         - Band gap (eV)
 % cc          - Carrier concentration (cm^-3)
 % effectmass  - Effective mass, either Mp or Mn. (no units. don't include M_0)
-function plotbands(names, E_ea, E_g, cc, effectmass)
+% type        - A string ('n' or 'p') to specity which type is in this element.
+function plotbands(names, E_ea, E_g, cc, effectmass, type)
 % BEGIN CALCULATION
 
 % E_val - energy of valence band
@@ -54,10 +53,14 @@ effectmass = effectmass * electronMass;
 N = calcDensityStates(effectmass, kT_J);
 
 % Calculate Fermi level from the prerequisites.
-% Based on _Solid State Electronic Devices_, equation 3-15.
-% Note: In MATLAB, log() is the natural logarithm, not the common logarithm.
-E_fermi(1, 1) = E_val(1, 1) - kT_eV * log(cc(1, 1) / N(1, 1));	% p-type
-E_fermi(1, 2) = kT_eV * log(cc(1, 2) / N(1, 2)) + E_cnd(1, 2);	% n-type
+E_fermi = zeros(1, 2);
+for t = 1:2
+	if type(1, t) == 'n'
+		E_fermi(1, t) = calcFermiN(kT_eV, cc(1, t), N(1, t), E_cnd(1, t));
+	elseif type(1, t) == 'p'
+		E_fermi(1, t) = calcFermiP(kT_eV, cc(1, t), N(1, t), E_val(1, t));
+	end
+end
 
 % BEGIN DRAWING
 
@@ -137,5 +140,20 @@ N = 2 * ( (2 .* pi .* M .* kT) / (planck ^ 2) ) .^ (3/2);
 
 % N is in m^-3, so we convert to cm^-3.
 N = N / (100 ^ 3);
+
+end
+
+function E_f = calcFermiN(kT_eV, cc, N, E_cnd)
+% Based on _Solid State Electronic Devices_, equation 3-15.
+% Assumes E_f < E_cnd by several kT_eV.
+% Note: In MATLAB, log() is the natural logarithm, not the common logarithm.
+E_f = kT_eV .* log(cc ./ N) + E_cnd;	% n-type
+end
+
+function E_f = calcFermiP(kT_eV, cc, N, E_val)
+% Based on _Solid State Electronic Devices_, equation 3-19.
+% Assumes E_f > E_val by several kT_eV.
+% Note: In MATLAB, log() is the natural logarithm, not the common logarithm.
+E_f = E_val - kT_eV .* log(cc ./ N);	% p-type
 
 end
