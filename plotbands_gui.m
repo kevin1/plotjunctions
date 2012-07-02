@@ -241,6 +241,24 @@ switch name
 				% http://www.springermaterials.com/docs/info/10681727_71.html
 				properties.effectmass = 1.8;
 		end
+		
+	case 'Si'
+		% From Sarah
+		properties.E_ea = 3.5;
+		% From Sarah
+		properties.E_g = 1.1;
+		% From Sarah
+		properties.cc = 1e+17;
+		
+		switch type
+			case 'n'
+				% _Solid State Electronic Devices_, appendix 3
+				properties.effectmass = 0.98;
+			case 'p'
+				% _Solid State Electronic Devices_, appendix 3
+				properties.effectmass = 0.16;
+		end
+		
 end
 
 % --- Import the currently selected preset into a material form
