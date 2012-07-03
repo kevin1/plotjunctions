@@ -22,7 +22,7 @@ function varargout = plotjunctions_gui(varargin)
 
 % Edit the above text to modify the response to help plotjunctions_gui
 
-% Last Modified by GUIDE v2.5 03-Jul-2012 14:57:48
+% Last Modified by GUIDE v2.5 03-Jul-2012 15:34:58
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -113,6 +113,9 @@ cc = [str2double(get(handles.cc_edit_1, 'String')), ...
 effectmass = [str2double(get(handles.effectmass_edit_1, 'String')), ...
 	str2double(get(handles.effectmass_edit_2, 'String'))];
 
+dielectric = [str2double(get(handles.dielectric_edit_1, 'String')), ...
+	str2double(get(handles.dielectric_edit_2, 'String'))];
+
 % str2num() not necessary here because we actually do want an array of
 % characters.
 type = [n_or_p(handles.material1_radio_n, handles.material1_radio_p), ...
@@ -123,7 +126,7 @@ figure()
 % Put future stuff into the figure
 hold on
 % Make a pretty picture
-plotjunctions(names, E_ea, E_g, cc, effectmass, type)
+plotjunctions(names, E_ea, E_g, cc, effectmass, type, dielectric)
 
 
 % --- Executes on selection change in popupmenu1.
@@ -223,6 +226,8 @@ switch name
 				properties.effectmass = 0.80;
 		end
 		
+		properties.dielectric = 9999;
+		
 	case 'Cu2S'
 		% From Sarah
 		properties.E_ea = 4.2;
@@ -242,6 +247,8 @@ switch name
 				properties.effectmass = 1.8;
 		end
 		
+		properties.dielectric = 9999;
+		
 	case 'Si'
 		% From Sarah
 		properties.E_ea = 3.5;
@@ -258,6 +265,8 @@ switch name
 				% _Solid State Electronic Devices_, appendix 3
 				properties.effectmass = 0.16;
 		end
+		
+		properties.dielectric = 9999;
 		
 end
 
@@ -285,36 +294,18 @@ type = n_or_p(handles.import_radio_n, handles.import_radio_p);
 properties = get_preset(name, type);
 
 % Throw the data into the appropriate form.
-switch material_num
-	case 1
-		set(handles.name_edit_1, 'String', properties.name)
-		set(handles.ea_edit_1, 'String', properties.E_ea)
-		set(handles.g_edit_1, 'String', properties.E_g)
-		set(handles.cc_edit_1, 'String', properties.cc)
-		set(handles.effectmass_edit_1, 'String', properties.effectmass)
-		switch properties.type
-			case 'n'
-				set(handles.material1_radio_n, 'Value', 1)
-			case 'p'
-				set(handles.material1_radio_n, 'Value', 0)
-		end
-		set(handles.material1_radio_p, 'Value', not(get(handles.material1_radio_n, 'Value')))
-		
-	% Copied from case 1, but replacing 2 in all handle names.
-	case 2
-		set(handles.name_edit_2, 'String', properties.name)
-		set(handles.ea_edit_2, 'String', properties.E_ea)
-		set(handles.g_edit_2, 'String', properties.E_g)
-		set(handles.cc_edit_2, 'String', properties.cc)
-		set(handles.effectmass_edit_2, 'String', properties.effectmass)
-		switch properties.type
-			case 'n'
-				set(handles.material2_radio_n, 'Value', 1)
-			case 'p'
-				set(handles.material2_radio_n, 'Value', 0)
-		end
-		set(handles.material2_radio_p, 'Value', not(get(handles.material2_radio_n, 'Value')))
-end
+
+eval(sprintf('set(handles.name_edit_%d, ''String'', properties.name)', material_num))
+eval(sprintf('set(handles.ea_edit_%d, ''String'', properties.E_ea)', material_num))
+eval(sprintf('set(handles.g_edit_%d, ''String'', properties.E_g)', material_num))
+eval(sprintf('set(handles.cc_edit_%d, ''String'', properties.cc)', material_num))
+eval(sprintf('set(handles.effectmass_edit_%d, ''String'', properties.effectmass)', material_num))
+eval(sprintf('set(handles.dielectric_edit_%d, ''String'', properties.dielectric)', material_num))
+% Clear the radio buttons
+eval(sprintf('set(handles.material%d_radio_n, ''Value'', 0)', material_num))
+eval(sprintf('set(handles.material%d_radio_p, ''Value'', 0)', material_num))
+% Set the appropriate radio button.
+eval(sprintf('set(handles.material%d_radio_%c, ''Value'', 1)', material_num, properties.type))
 
 
 % --- Executes on button press in button_import1.
@@ -556,6 +547,52 @@ function effectmass_edit_2_Callback(hObject, eventdata, handles)
 % --- Executes during object creation, after setting all properties.
 function effectmass_edit_2_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to effectmass_edit_2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function dielectric_edit_2_Callback(hObject, eventdata, handles)
+% hObject    handle to dielectric_edit_2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of dielectric_edit_2 as text
+%        str2double(get(hObject,'String')) returns contents of dielectric_edit_2 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function dielectric_edit_2_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to dielectric_edit_2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function dielectric_edit_1_Callback(hObject, eventdata, handles)
+% hObject    handle to dielectric_edit_1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of dielectric_edit_1 as text
+%        str2double(get(hObject,'String')) returns contents of dielectric_edit_1 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function dielectric_edit_1_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to dielectric_edit_1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 

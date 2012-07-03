@@ -7,7 +7,8 @@
 % cc          - Carrier concentration (cm^-3)
 % effectmass  - Effective mass, either Mp or Mn. (no units. don't include M_0)
 % type        - A string ('n' or 'p') to specity which type is in this element.
-function plotjunctions(names, E_ea, E_g, cc, effectmass, type)
+% dielectric  - 
+function plotjunctions(names, E_ea, E_g, cc, effectmass, type, dielectric)
 % BEGIN CALCULATION
 
 % E_val - energy of valence band
