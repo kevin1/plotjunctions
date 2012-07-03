@@ -1,5 +1,5 @@
-% plotbands: calculates and plots the energy of conduction and valence bands, 
-% plus the Fermi levels.
+% plotjunctions: calculates and plots the energy of conduction and valence
+% bands, Fermi levels, and potentials.
 % All variables are 1D matricies with length of 2.
 % name        - Name for material, present for user convenience
 % E_ea        - Electron affinity (eV)
@@ -7,7 +7,7 @@
 % cc          - Carrier concentration (cm^-3)
 % effectmass  - Effective mass, either Mp or Mn. (no units. don't include M_0)
 % type        - A string ('n' or 'p') to specity which type is in this element.
-function plotbands(names, E_ea, E_g, cc, effectmass, type)
+function plotjunctions(names, E_ea, E_g, cc, effectmass, type)
 % BEGIN CALCULATION
 
 % E_val - energy of valence band

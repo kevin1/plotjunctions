@@ -1,35 +1,35 @@
-function varargout = plotbands_gui(varargin)
-% PLOTBANDS_GUI MATLAB code for plotbands_gui.fig
-%      PLOTBANDS_GUI, by itself, creates a new PLOTBANDS_GUI or raises the existing
+function varargout = plotjunctions_gui(varargin)
+% PLOTJUNCTIONS_GUI MATLAB code for plotjunctions_gui.fig
+%      PLOTJUNCTIONS_GUI, by itself, creates a new PLOTJUNCTIONS_GUI or raises the existing
 %      singleton*.
 %
-%      H = PLOTBANDS_GUI returns the handle to a new PLOTBANDS_GUI or the handle to
+%      H = PLOTJUNCTIONS_GUI returns the handle to a new PLOTJUNCTIONS_GUI or the handle to
 %      the existing singleton*.
 %
-%      PLOTBANDS_GUI('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in PLOTBANDS_GUI.M with the given input arguments.
+%      PLOTJUNCTIONS_GUI('CALLBACK',hObject,eventData,handles,...) calls the local
+%      function named CALLBACK in PLOTJUNCTIONS_GUI.M with the given input arguments.
 %
-%      PLOTBANDS_GUI('Property','Value',...) creates a new PLOTBANDS_GUI or raises the
+%      PLOTJUNCTIONS_GUI('Property','Value',...) creates a new PLOTJUNCTIONS_GUI or raises the
 %      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before plotbands_gui_OpeningFcn gets called.  An
+%      applied to the GUI before plotjunctions_gui_OpeningFcn gets called.  An
 %      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to plotbands_gui_OpeningFcn via varargin.
+%      stop.  All inputs are passed to plotjunctions_gui_OpeningFcn via varargin.
 %
 %      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
 %      instance to run (singleton)".
 %
 % See also: GUIDE, GUIDATA, GUIHANDLES
 
-% Edit the above text to modify the response to help plotbands_gui
+% Edit the above text to modify the response to help plotjunctions_gui
 
-% Last Modified by GUIDE v2.5 27-Jun-2012 13:16:53
+% Last Modified by GUIDE v2.5 03-Jul-2012 14:57:48
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @plotbands_gui_OpeningFcn, ...
-                   'gui_OutputFcn',  @plotbands_gui_OutputFcn, ...
+                   'gui_OpeningFcn', @plotjunctions_gui_OpeningFcn, ...
+                   'gui_OutputFcn',  @plotjunctions_gui_OutputFcn, ...
                    'gui_LayoutFcn',  [] , ...
                    'gui_Callback',   []);
 if nargin && ischar(varargin{1})
@@ -44,26 +44,26 @@ end
 % End initialization code - DO NOT EDIT
 
 
-% --- Executes just before plotbands_gui is made visible.
-function plotbands_gui_OpeningFcn(hObject, eventdata, handles, varargin)
+% --- Executes just before plotjunctions_gui is made visible.
+function plotjunctions_gui_OpeningFcn(hObject, eventdata, handles, varargin)
 % This function has no output args, see OutputFcn.
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% varargin   command line arguments to plotbands_gui (see VARARGIN)
+% varargin   command line arguments to plotjunctions_gui (see VARARGIN)
 
-% Choose default command line output for plotbands_gui
+% Choose default command line output for plotjunctions_gui
 handles.output = hObject;
 
 % Update handles structure
 guidata(hObject, handles);
 
-% UIWAIT makes plotbands_gui wait for user response (see UIRESUME)
+% UIWAIT makes plotjunctions_gui wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = plotbands_gui_OutputFcn(hObject, eventdata, handles) 
+function varargout = plotjunctions_gui_OutputFcn(hObject, eventdata, handles) 
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -98,20 +98,20 @@ function plotbutton_Callback(hObject, eventdata, handles)
 % Get the information from the GUI so that we can pass it into plotbands().
 % str2num() is used to convert from ASCII representations of numbers to actual
 % numbers.
-names = [str2num(get(handles.name_edit_1, 'String')), ...
-	str2num(get(handles.name_edit_2, 'String'))];
+names = [str2double(get(handles.name_edit_1, 'String')), ...
+	str2double(get(handles.name_edit_2, 'String'))];
 
-E_ea = [str2num(get(handles.ea_edit_1, 'String')), ...
-	str2num(get(handles.ea_edit_2, 'String'))];
+E_ea = [str2double(get(handles.ea_edit_1, 'String')), ...
+	str2double(get(handles.ea_edit_2, 'String'))];
 
-E_g = [str2num(get(handles.g_edit_1, 'String')), ...
-	str2num(get(handles.g_edit_2, 'String'))];
+E_g = [str2double(get(handles.g_edit_1, 'String')), ...
+	str2double(get(handles.g_edit_2, 'String'))];
 
-cc = [str2num(get(handles.cc_edit_1, 'String')), ...
-	str2num(get(handles.cc_edit_2, 'String'))];
+cc = [str2double(get(handles.cc_edit_1, 'String')), ...
+	str2double(get(handles.cc_edit_2, 'String'))];
 
-effectmass = [str2num(get(handles.effectmass_edit_1, 'String')), ...
-	str2num(get(handles.effectmass_edit_2, 'String'))];
+effectmass = [str2double(get(handles.effectmass_edit_1, 'String')), ...
+	str2double(get(handles.effectmass_edit_2, 'String'))];
 
 % str2num() not necessary here because we actually do want an array of
 % characters.
@@ -123,7 +123,7 @@ figure()
 % Put future stuff into the figure
 hold on
 % Make a pretty picture
-plotbands(names, E_ea, E_g, cc, effectmass, type)
+plotjunctions(names, E_ea, E_g, cc, effectmass, type)
 
 
 % --- Executes on selection change in popupmenu1.
