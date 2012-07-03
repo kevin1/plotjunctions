@@ -54,12 +54,17 @@ N = calcDensityStates(effectmass, kT_J);
 
 % Calculate Fermi level from the prerequisites.
 E_fermi = zeros(1, 2);
+% Loop through every element in the matrix type.
 for t = 1:2
-	if type(1, t) == 'n'
-		E_fermi(1, t) = calcFermiN(kT_eV, cc(1, t), N(1, t), E_cnd(1, t));
-	elseif type(1, t) == 'p'
-		E_fermi(1, t) = calcFermiP(kT_eV, cc(1, t), N(1, t), E_val(1, t));
+	currType = type(1, t);
+	if currType == 'n'
+		calcFermi = calcFermiN(kT_eV, cc(1, t), N(1, t), E_cnd(1, t));
+	elseif currType == 'p'
+		calcFermi = calcFermiP(kT_eV, cc(1, t), N(1, t), E_val(1, t));
+	else
+		error('Invalid type "%c" in matrix "type" at index %d', currType, t)
 	end
+	E_fermi(1, t) = calcFermi;
 end
 
 % BEGIN DRAWING
