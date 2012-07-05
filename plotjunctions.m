@@ -140,7 +140,7 @@ axis([ ...
 % TODO
 
 % Add x-axis label
-xlabel('Position (unit?)')	% TODO
+xlabel('Position (cm)')
 
 % Add y-axis label
 ylabel('Energy (eV)')
