@@ -226,7 +226,8 @@ switch name
 				properties.effectmass = 0.80;
 		end
 		
-		properties.dielectric = 9999;
+		% _Solid State Electronic Devices_, appendix 3
+		properties.dielectric = 8.9;
 		
 	case 'Cu2S'
 		% From Sarah
@@ -266,7 +267,8 @@ switch name
 				properties.effectmass = 0.16;
 		end
 		
-		properties.dielectric = 9999;
+		% _Solid State Electronic Devices_, appendix 3
+		properties.dielectric = 11.8;
 		
 end
 
