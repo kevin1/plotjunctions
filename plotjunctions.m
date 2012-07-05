@@ -150,6 +150,26 @@ V_a = 0;
 deltaV(1, 1) = calcVoltageDrop1(V_bi, V_a, cc, dielectric);
 deltaV(1, 2) = calcVoltageDrop1(V_bi, V_a, [cc(1, 2) cc(1, 1)], [dielectric(1, 2) dielectric(1, 1)]);
 depletionWidths = calcDepletionWidth1(dielectric, deltaV, cc)
+depletionTotal = sum(depletionWidths);
+depletionResolution = 1000;
+
+figure
+hold on
+x = (-1 * depletionWidths(1, 1)) : (depletionTotal / depletionResolution) : 0;
+% From Wolfram|Alpha, query was "dielectric constant of vacuum in F/cm"
+% Electric constant in Farads / cm
+Eps_0 = 8.854e-14;
+% From Wolfram|Alpha, query was "charge of an electron in coulombs"
+% Charge of an electron in Coulombs
+q = 1.6021766e-19;
+y = (q * N(1, 1)) / (2 * dielectric(1, 1) * Eps_0) * (x + depletionWidths(1, 1)) .^ 2;
+plot(x, y)
+
+figure
+hold on
+x = 0 : (depletionTotal / depletionResolution) : depletionWidths(1, 2);
+y = (V_bi - V_a) - (q * cc(1, 2)) / (2 * dielectric(1, 2) * Eps_0) * (depletionWidths(1, 2) - x) .^ 2;
+plot(x, y)
 
 end
 
