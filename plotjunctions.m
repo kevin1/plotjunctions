@@ -68,6 +68,35 @@ for t = 1:2
 	E_fermi(1, t) = calcFermi;
 end
 
+% The built-in potential is the difference between the Fermi levels.
+V_bi = abs(E_fermi(1, 1) - E_fermi(1, 2));
+% The applied voltage in this simulation will always be 0 V.
+V_a = 0;
+% Calculate the voltage drops on both sides of the junction.
+deltaV(1, 1) = calcVoltageDrop1(V_bi, V_a, cc, dielectric);
+deltaV(1, 2) = calcVoltageDrop1(V_bi, V_a, [cc(1, 2) cc(1, 1)], [dielectric(1, 2) dielectric(1, 1)]);
+% Use the voltage drops to calculate the depletion widths.
+depletionWidth = calcDepletionWidth1(dielectric, deltaV, cc);
+
+% Number of samples to make when plotting voltage curves.
+potentialPlotResolution = 1000;
+% X-range for the first part is from the left end of the depletion area to the
+% center of the diagram.
+potPlot_x1 = (-1 * depletionWidth(1, 1)) : (depletionWidth(1, 1) / potentialPlotResolution) : 0;
+% Calculate y-values based on those generated x-values.
+potPlot_y1 = calcVoltageCurve1(cc(1, 1), dielectric(1, 1), depletionWidth(1, 1), potPlot_x1);
+% Throw this onto a plot.
+plot(potPlot_x1, potPlot_y1)
+% Future calls to plot() will go into the same figure.
+hold on
+
+% Repeat the procedure for the second half of the curve.
+potPlot_x2 = 0 : (depletionWidth(1, 2) / potentialPlotResolution) : depletionWidth(1, 2);
+potPlot_y2 = calcVoltageCurve2(V_bi, V_a, cc(1, 2), dielectric(1, 2), depletionWidth(1, 2), potPlot_x2);
+plot(potPlot_x2, potPlot_y2)
+
+depletionTotal = sum(depletionWidth);
+
 % BEGIN DRAWING
 
 % Define the plotting area.
@@ -107,6 +136,7 @@ end
 % Create the figure and add material 1 to the figure
 % MATLAB lets you specify a third argument in each set if you want to change the
 % style of just that line.
+figure
 plot(...
 	xrange(:, 1), [E_val_plot(1, 1),   E_val_plot(1, 1)], ...
 	xrange(:, 1), [E_cnd_plot(1, 1),   E_cnd_plot(1, 1)], ...
@@ -144,32 +174,6 @@ xlabel('Position (cm)')
 
 % Add y-axis label
 ylabel('Energy (eV)')
-
-V_bi = abs(E_fermi(1, 1) - E_fermi(1, 2));
-V_a = 0;
-deltaV(1, 1) = calcVoltageDrop1(V_bi, V_a, cc, dielectric);
-deltaV(1, 2) = calcVoltageDrop1(V_bi, V_a, [cc(1, 2) cc(1, 1)], [dielectric(1, 2) dielectric(1, 1)]);
-depletionWidths = calcDepletionWidth1(dielectric, deltaV, cc)
-depletionTotal = sum(depletionWidths);
-depletionResolution = 1000;
-
-figure
-hold on
-x = (-1 * depletionWidths(1, 1)) : (depletionTotal / depletionResolution) : 0;
-% From Wolfram|Alpha, query was "dielectric constant of vacuum in F/cm"
-% Electric constant in Farads / cm
-Eps_0 = 8.854e-14;
-% From Wolfram|Alpha, query was "charge of an electron in coulombs"
-% Charge of an electron in Coulombs
-q = 1.6021766e-19;
-y = (q * N(1, 1)) / (2 * dielectric(1, 1) * Eps_0) * (x + depletionWidths(1, 1)) .^ 2;
-plot(x, y)
-
-figure
-hold on
-x = 0 : (depletionTotal / depletionResolution) : depletionWidths(1, 2);
-y = (V_bi - V_a) - (q * cc(1, 2)) / (2 * dielectric(1, 2) * Eps_0) * (depletionWidths(1, 2) - x) .^ 2;
-plot(x, y)
 
 end
 
@@ -220,4 +224,26 @@ Eps_0 = 8.854e-14;
 q = 1.6021766e-19;
 % Based on "Heterostructure Fundamentals" Mark Lundstrom, equations 32 and 33.
 depWidth = sqrt( (2 * Eps_r .* Eps_0 .* V) ./ (q .* N) );
+end
+
+function V = calcVoltageCurve1(N, Eps_r, depletionWidth, x)
+% From Wolfram|Alpha, query was "dielectric constant of vacuum in F/cm"
+% Electric constant in Farads / cm
+Eps_0 = 8.854e-14;
+% From Wolfram|Alpha, query was "charge of an electron in coulombs"
+% Charge of an electron in Coulombs
+q = 1.6021766e-19;
+% Based on "Heterostructure Fundamentals" Mark Lundstrom, equation 23.
+V = (q * N(1, 1)) / (2 * Eps_r * Eps_0) * (x + depletionWidth) .^ 2;
+end
+
+function V = calcVoltageCurve2(V_bi, V_a, N, Eps_r, depletionWidth, x)
+% From Wolfram|Alpha, query was "dielectric constant of vacuum in F/cm"
+% Electric constant in Farads / cm
+Eps_0 = 8.854e-14;
+% From Wolfram|Alpha, query was "charge of an electron in coulombs"
+% Charge of an electron in Coulombs
+q = 1.6021766e-19;
+% Based on "Heterostructure Fundamentals" Mark Lundstrom, equation 24.
+V = (V_bi - V_a) - (q * N) / (2 * Eps_r * Eps_0) * (depletionWidth - x) .^ 2;
 end
