@@ -216,7 +216,7 @@ switch name
 		switch type
 			case 'n'
 				% From Sarah
-				properties.cc = 1e+1;
+				properties.cc = 1e+16;
 				% _Solid State Electronic Devices_, appendix 3
 				properties.effectmass = 0.21;
 			case 'p'
