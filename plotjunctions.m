@@ -199,5 +199,5 @@ Eps_0 = 8.854e-14;
 % Charge of an electron in Coulombs
 q = 1.6021766e-19;
 % Based on "Heterostructure Fundamentals" Mark Lundstrom, equations 32 and 33.
-depWidth = sqrt( (2 * Eps_r .* Eps_0 .* V) / (q .* N) );
+depWidth = sqrt( (2 * Eps_r .* Eps_0 .* V) ./ (q .* N) );
 end
