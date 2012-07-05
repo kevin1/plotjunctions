@@ -145,6 +145,12 @@ xlabel('Position (unit?)')	% TODO
 % Add y-axis label
 ylabel('Energy (eV)')
 
+V_bi = abs(E_fermi(1, 1) - E_fermi(1, 2));
+V_a = 0;
+deltaV(1, 1) = calcVoltageDrop1(V_bi, V_a, cc, dielectric);
+deltaV(1, 2) = calcVoltageDrop1(V_bi, V_a, [cc(1, 2) cc(1, 1)], [dielectric(1, 2) dielectric(1, 1)]);
+depletionWidths = calcDepletionWidth1(dielectric, deltaV, cc)
+
 end
 
 function N = calcDensityStates(M, kT)
@@ -176,4 +182,22 @@ function E_f = calcFermiP(kT_eV, cc, N, E_val)
 % Note: In MATLAB, log() is the natural logarithm, not the common logarithm.
 E_f = E_val - kT_eV .* log(cc ./ N);	% p-type
 
+end
+
+% Returns the voltage drop on the side of the junction specified by index 1 in
+% N and Eps_r.
+function voltDrop = calcVoltageDrop1(V_bi, V_a, N, Eps_r)
+% Based on "Heterostructure Fundamentals" Mark Lundstrom, equations 30 and 31.
+voltDrop = (V_bi - V_a) * ( (Eps_r(1, 2) * N(1, 2)) / (Eps_r(1, 1) * N(1, 1) + Eps_r(1, 2) * N(1, 2)) );
+end
+
+function depWidth = calcDepletionWidth1(Eps_r, V, N)
+% From Wolfram|Alpha, query was "dielectric constant of vacuum in F/cm"
+% Electric constant in Farads / cm
+Eps_0 = 8.854e-14;
+% From Wolfram|Alpha, query was "charge of an electron in coulombs"
+% Charge of an electron in Coulombs
+q = 1.6021766e-19;
+% Based on "Heterostructure Fundamentals" Mark Lundstrom, equations 32 and 33.
+depWidth = sqrt( (2 * Eps_r .* Eps_0 .* V) / (q .* N) );
 end
