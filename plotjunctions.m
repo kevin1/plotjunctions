@@ -124,8 +124,8 @@ plot(potPlot_x2, potPlot_y2 + plotOffset)
 depletionTotal = sum(depletionWidth);
 
 % Define the x-coordinates to start and stop plotting.
-start = -1 * (depletionWidth(1, 1) + depletionTotal)
-stop = depletionWidth(1, 2) + depletionTotal
+start = -1 * (depletionWidth(1, 1) + depletionTotal);
+stop = depletionWidth(1, 2) + depletionTotal;
 
 % Calculate x ranges where the bands will be plotted
 
