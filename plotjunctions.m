@@ -68,6 +68,20 @@ for t = 1:2
 	E_fermi(1, t) = calcFermi;
 end
 
+deltaFermi = abs(E_fermi(1, 1) - E_fermi(1, 2));
+E_val_plot = E_val;
+E_cnd_plot = E_cnd;
+E_fermi_plot = E_fermi;
+if E_fermi(1, 1) < E_fermi(1, 2)
+	E_val_plot(1, 2) = E_val_plot(1, 2) - deltaFermi;
+	E_cnd_plot(1, 2) = E_cnd_plot(1, 2) - deltaFermi;
+	E_fermi_plot(1, 2) = E_fermi_plot(1, 2) - deltaFermi;
+else
+	E_val_plot(1, 1) = E_val_plot(1, 1) - deltaFermi;
+	E_cnd_plot(1, 1) = E_cnd_plot(1, 1) - deltaFermi;
+	E_fermi_plot(1, 1) = E_fermi_plot(1, 1) - deltaFermi;
+end
+
 % The built-in potential is the difference between the Fermi levels.
 V_bi = abs(E_fermi(1, 1) - E_fermi(1, 2));
 % The applied voltage in this simulation will always be 0 V.
@@ -80,22 +94,30 @@ depletionWidth = calcDepletionWidth1(dielectric, deltaV, cc);
 
 % Number of samples to make when plotting voltage curves.
 potentialPlotResolution = 1000;
+if potentialPlotResolution < 2
+	error('potentialPlotResolution is too low. It needs to be at least 2.')
+end
 % X-range for the first part is from the left end of the depletion area to the
 % center of the diagram.
 potPlot_x1 = (-1 * depletionWidth(1, 1)) : (depletionWidth(1, 1) / potentialPlotResolution) : 0;
 % Calculate y-values based on those generated x-values.
 potPlot_y1 = calcVoltageCurve1(cc(1, 1), dielectric(1, 1), depletionWidth(1, 1), potPlot_x1);
 % Throw this onto a plot.
-plot(potPlot_x1, potPlot_y1)
+plotOffset = E_cnd_plot(1) - potPlot_y1(1);
+plot(potPlot_x1, potPlot_y1 + plotOffset)
 % Future calls to plot() will go into the same figure.
 hold on
+plotOffset = E_val_plot(1) - potPlot_y1(1);
+plot(potPlot_x1, potPlot_y1 + plotOffset)
 
 % Repeat the procedure for the second half of the curve.
 potPlot_x2 = 0 : (depletionWidth(1, 2) / potentialPlotResolution) : depletionWidth(1, 2);
 potPlot_y2 = calcVoltageCurve2(V_bi, V_a, cc(1, 2), dielectric(1, 2), depletionWidth(1, 2), potPlot_x2);
-plot(potPlot_x2, potPlot_y2)
 
-depletionTotal = sum(depletionWidth);
+plotOffset = E_cnd_plot(2) - potPlot_y2(potentialPlotResolution);
+plot(potPlot_x2, potPlot_y2 + plotOffset)
+plotOffset = E_val_plot(2) - potPlot_y2(potentialPlotResolution);
+plot(potPlot_x2, potPlot_y2 + plotOffset)
 
 % BEGIN DRAWING
 
@@ -120,20 +142,6 @@ xrange(:, 2) = [start + 2 * (width/3),  stop                  ];
 % may specify line style, color, data markers, or some combination of those.
 % This will be passed into plot() to set the style of E_fermi lines.
 E_fermi_style = '--';	% dashed line
-
-deltaFermi = abs(E_fermi(1, 1) - E_fermi(1, 2));
-E_val_plot = E_val;
-E_cnd_plot = E_cnd;
-E_fermi_plot = E_fermi;
-if E_fermi(1, 1) < E_fermi(1, 2)
-	E_val_plot(1, 2) = E_val_plot(1, 2) - deltaFermi;
-	E_cnd_plot(1, 2) = E_cnd_plot(1, 2) - deltaFermi;
-	E_fermi_plot(1, 2) = E_fermi_plot(1, 2) - deltaFermi;
-else
-	E_val_plot(1, 1) = E_val_plot(1, 1) - deltaFermi;
-	E_cnd_plot(1, 1) = E_cnd_plot(1, 1) - deltaFermi;
-	E_fermi_plot(1, 1) = E_fermi_plot(1, 1) - deltaFermi;
-end
 
 % Create the figure and add material 1 to the figure
 % MATLAB lets you specify a third argument in each set if you want to change the
