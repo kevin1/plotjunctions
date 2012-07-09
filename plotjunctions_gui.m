@@ -248,6 +248,7 @@ switch name
 				properties.effectmass = 1.8;
 		end
 		
+		% TODO
 		properties.dielectric = 9999;
 		
 	case 'Si'
