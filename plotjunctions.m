@@ -99,9 +99,11 @@ depletionTotal = sum(depletionWidth);
 
 % BEGIN DRAWING
 
-% Define the plotting area.
-start = -1.5;	% X location to start plotting the diagram
-stop = 1.5;	% X location to stop plotting the diagram
+depletionTotal = sum(depletionWidth);
+
+% Define the x-coordinates to start and stop plotting.
+start = -1 * (depletionWidth(1, 1) + depletionTotal)
+stop = depletionWidth(1, 2) + depletionTotal
 
 % Calculate x ranges where the bands will be plotted
 
@@ -161,10 +163,10 @@ plot(...
 yvalues = [E_val_plot(1, 1), E_cnd_plot(1, 1), E_fermi_plot(1, 1), ...
            E_val_plot(1, 2), E_cnd_plot(1, 2), E_fermi_plot(1, 2)];
 % Set the window range
-axis([ ...
-	start - 1,         stop + 1,        ... % xmin, xmax
-	min(yvalues) - 1,  max(yvalues) + 1 ... % ymin, ymax
-])
+% axis([ ...
+% 	start - depletionTotal,         stop + depletionTotal,        ... % xmin, xmax
+% 	min(yvalues) - depletionTotal,  max(yvalues) + depletionTotal ... % ymin, ymax
+% ])
 
 % Add labels for energy levels
 % TODO
