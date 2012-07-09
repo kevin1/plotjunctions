@@ -99,7 +99,7 @@ if potentialPlotResolution < 2
 end
 % X-range for the first part is from the left end of the depletion area to the
 % center of the diagram.
-potPlot_x1 = (-1 * depletionWidth(1, 1)) : (depletionWidth(1, 1) / potentialPlotResolution) : 0;
+potPlot_x1 = (-1 * depletionWidth(1, 1)) : (depletionWidth(1, 1) / (potentialPlotResolution - 1)) : 0;
 % Calculate y-values based on those generated x-values.
 potPlot_y1 = calcVoltageCurve1(cc(1, 1), dielectric(1, 1), depletionWidth(1, 1), potPlot_x1);
 % Throw this onto a plot.
@@ -111,7 +111,7 @@ plotOffset = E_val_plot(1) - potPlot_y1(1);
 plot(potPlot_x1, potPlot_y1 + plotOffset)
 
 % Repeat the procedure for the second half of the curve.
-potPlot_x2 = 0 : (depletionWidth(1, 2) / potentialPlotResolution) : depletionWidth(1, 2);
+potPlot_x2 = 0 : (depletionWidth(1, 2) / (potentialPlotResolution - 1)) : depletionWidth(1, 2);
 potPlot_y2 = calcVoltageCurve2(V_bi, V_a, cc(1, 2), dielectric(1, 2), depletionWidth(1, 2), potPlot_x2);
 
 plotOffset = E_cnd_plot(2) - potPlot_y2(potentialPlotResolution);
