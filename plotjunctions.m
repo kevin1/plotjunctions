@@ -109,6 +109,8 @@ end
 % Calculate the curves for band bending in the depletion area.
 if E_fermi(1, 1) > E_fermi(1, 2)
 	% Material that acts like p-type is material 1.
+	i_actingP = 1;
+	i_actingN = 2;
 	
 	% X-range for the first part is from the left end of the depletion area to
 	% the center of the diagram.
@@ -122,6 +124,9 @@ if E_fermi(1, 1) > E_fermi(1, 2)
 
 else
 	% P-type actor is material 2.
+	i_actingP = 2;
+	i_actingN = 1;
+	
 	% We multiply the y-values by -1 here because the q * N terms in the
 	% calcVoltageCurve() functions need to be multiplied by -1.
 	
@@ -220,18 +225,44 @@ yvalues = [E_val_plot, E_cnd_plot, E_fermi_plot, ...
 ymin = min(min(yvalues));
 ymax = max(max(yvalues));
 
+plot_xmin = start - depletionTotal;
+plot_xmax = stop + depletionTotal;
 % Space to leave blank on the top and bottom of the figure.
 ypad = (ymax - ymin) / 4;
+plot_ymin = ymin - ypad;
+plot_ymax = ymax + ypad;
 % Set the window range
-axis([ ...
-	... % xmin, xmax
-	start - depletionTotal, stop + depletionTotal, ...
-	... % ymin, ymax
-	ymin - ypad,            ymax + ypad            ...
-])
+axis([plot_xmin, plot_xmax, plot_ymin, plot_ymax])
 
-% Add labels for energy levels
-% TODO
+% labels
+% Material names
+% Print them so that the x-values are in the middle of the flat area
+text(mean(xrange(:, 1)), ymax, names(1), ...
+	'HorizontalAlignment', 'center', 'VerticalAlignment', 'bottom')
+text(mean(xrange(:, 2)), ymax, names(2), ...
+	'HorizontalAlignment', 'center', 'VerticalAlignment', 'bottom')
+% Depletion
+text(-1 * depletionWidth(1)/2, ymax, ...
+	num2str(depletionWidth(1) * 1e7, '%.1f nm'), ...
+	'HorizontalAlignment', 'center', 'VerticalAlignment', 'bottom')
+% For some reason, MATLAB will not let me display the same label twice here. (It
+% works in the material names code.) To get around it, we display '(same)' for
+% the second depletion width if the two are the same.
+if depletionWidth(1) ~= depletionWidth(2)
+	depletionWidth2Disp = num2str(depletionWidth(2) * 1e7, '%.1f nm');
+else
+	depletionWidth2Disp = '(same)';
+end
+text(depletionWidth(2)/2, ymax, depletionWidth2Disp, ...
+	'HorizontalAlignment', 'center', 'VerticalAlignment', 'bottom')
+% Built-in potential
+text(plot_xmax, plot_ymin, sprintf('V_{bi}: %g V', V_bi), ...
+	'HorizontalAlignment', 'right', 'VerticalAlignment', 'bottom')
+% Maximum open circuit voltage
+text(plot_xmin, plot_ymin, ...
+	sprintf('Maximum V_{OC}: %g V', ...
+		E_cnd_plot(i_actingN) - E_val_plot(i_actingP)), ...
+	'VerticalAlignment', 'bottom')
 
 % Add x-axis label
 xlabel('Position (cm)')

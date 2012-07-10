@@ -98,8 +98,8 @@ function plotbutton_Callback(hObject, eventdata, handles)
 % Get the information from the GUI so that we can pass it into plotbands().
 % str2num() is used to convert from ASCII representations of numbers to actual
 % numbers.
-names = [str2double(get(handles.name_edit_1, 'String')), ...
-	str2double(get(handles.name_edit_2, 'String'))];
+names = {get(handles.name_edit_1, 'String'), ...
+	get(handles.name_edit_2, 'String')};
 
 E_ea = [str2double(get(handles.ea_edit_1, 'String')), ...
 	str2double(get(handles.ea_edit_2, 'String'))];
