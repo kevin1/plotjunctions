@@ -14,8 +14,7 @@ function plotjunctions(names, E_ea, E_g, cc, effectmass, type, dielectric)
 % E_val - energy of valence band
 % E_cnd - energy of conduction band
 
-% Assuming that global vacuum energy is 0 eV because the materials haven't
-% touched yet.
+% Assuming that global vacuum energy is 0 eV before the materials are touching.
 E_vac = 0;
 
 % Calculate conduction bands based on E_vac assumption, equation, and data
@@ -37,9 +36,9 @@ E_val = E_cnd - E_g;
 % Assuming room temperature. According to _Solid State Electronic Devices_
 % pg. 89, that makes kT 0.026 eV.
 kT_eV = 0.026;
-% From Wolfram|Alpha. Query was "Boltzmann constant * 300 K in J." I used
-% 300 K because that's the value _Solid State Electronic Devices_ assumed
-% for room temperature.
+% From Wolfram|Alpha. Query was "Boltzmann constant * 300 K in J." I used 300 K
+% because that's the value _Solid State Electronic Devices_ assumed for room
+% temperature.
 kT_J = 4.14195e-21;
 
 % Mass of an electron in kg.
@@ -58,6 +57,7 @@ E_fermi = zeros(1, 2);
 % Loop through every element in the matrix type.
 for t = 1:2
 	currType = type(1, t);
+	% Use the relevant (n or p) equation to calculate Fermi.
 	if currType == 'n'
 		calcFermi = calcFermiN(kT_eV, cc(1, t), N(1, t), E_cnd(1, t));
 	elseif currType == 'p'
@@ -65,13 +65,19 @@ for t = 1:2
 	else
 		error('Invalid type "%c" in matrix "type" at index %d', currType, t)
 	end
+	% Set the Fermi level.
 	E_fermi(1, t) = calcFermi;
 end
 
+% Calculate the absolute difference in Fermi levels.
 deltaFermi = abs(E_fermi(1, 1) - E_fermi(1, 2));
+% Make copies of the energy variables. Future expansion may require referencing
+% unmoved levels (ones where E_val is zero).
 E_val_plot = E_val;
 E_cnd_plot = E_cnd;
 E_fermi_plot = E_fermi;
+% Align Fermi levels: for the material that currently has the higher Fermi level
+% in our representation, move it down by deltaFermi.
 if E_fermi(1, 1) < E_fermi(1, 2)
 	E_val_plot(1, 2) = E_val_plot(1, 2) - deltaFermi;
 	E_cnd_plot(1, 2) = E_cnd_plot(1, 2) - deltaFermi;
@@ -94,9 +100,12 @@ depletionWidth = calcDepletionWidth1(dielectric, deltaV, cc);
 
 % Number of samples to make when plotting voltage curves.
 potentialPlotResolution = 1000;
+% We need at least two points to draw a line. Also, a negative resolution does
+% not make sense.
 if potentialPlotResolution < 2
 	error('potentialPlotResolution is too low. It needs to be at least 2.')
 end
+
 % X-range for the first part is from the left end of the depletion area to the
 % center of the diagram.
 potPlot_x1 = (-1 * depletionWidth(1, 1)) : (depletionWidth(1, 1) / (potentialPlotResolution - 1)) : 0;
