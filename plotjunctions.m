@@ -145,13 +145,16 @@ plot(potPlot_x1, potPlot_y1_cnd)
 hold on
 % Calculate offset & plot.
 plotOffset = E_val_plot(1) - potPlot_y1(1);
-plot(potPlot_x1, potPlot_y1 + plotOffset)
+potPlot_y1_val = potPlot_y1 + plotOffset;
+plot(potPlot_x1, potPlot_y1_val)
 
 % Repeat procedure for the right half.
 plotOffset = E_cnd_plot(2) - potPlot_y2(potentialPlotResolution);
-plot(potPlot_x2, potPlot_y2 + plotOffset)
+potPlot_y2_cnd = potPlot_y2 + plotOffset;
+plot(potPlot_x2, potPlot_y2_cnd)
 plotOffset = E_val_plot(2) - potPlot_y2(potentialPlotResolution);
-plot(potPlot_x2, potPlot_y2 + plotOffset)
+potPlot_y2_val = potPlot_y2 + plotOffset;
+plot(potPlot_x2, potPlot_y2_val)
 
 % BEGIN DRAWING
 
@@ -202,13 +205,24 @@ plot(...
 % are placed horizontally on the border of the figure.
 
 % Make a matrix of the y values for convenience.
-yvalues = [E_val_plot(1, 1), E_cnd_plot(1, 1), E_fermi_plot(1, 1), ...
-           E_val_plot(1, 2), E_cnd_plot(1, 2), E_fermi_plot(1, 2)];
+yvalues = [E_val_plot, E_cnd_plot, E_fermi_plot, ...
+	potPlot_y1_cnd, potPlot_y1_val, potPlot_y2_cnd, potPlot_y2_val];
+% Find maximum and minimum y values.
+% Using nested calls to min() and max() because we are passing in 2-D matricies,
+% which return 1-D matricies of the min/max in each column. So to get the
+% min/max of all the elements, we run min()/max() on the 1-D matrix.
+ymin = min(min(yvalues));
+ymax = max(max(yvalues));
+
+% Space to leave blank on the top and bottom of the figure.
+ypad = (ymax - ymin) / 4;
 % Set the window range
-% axis([ ...
-% 	start - depletionTotal,         stop + depletionTotal,        ... % xmin, xmax
-% 	min(yvalues) - depletionTotal,  max(yvalues) + depletionTotal ... % ymin, ymax
-% ])
+axis([ ...
+	... % xmin, xmax
+	start - depletionTotal, stop + depletionTotal, ...
+	... % ymin, ymax
+	ymin - ypad,            ymax + ypad            ...
+])
 
 % Add labels for energy levels
 % TODO
