@@ -103,7 +103,7 @@ potPlotResolution = 1000;
 % We need at least two points to draw a line. Also, a negative resolution does
 % not make sense.
 if potPlotResolution < 2
-	error('potentialPlotResolution is too low. It needs to be at least 2.')
+	error('potPlotResolution is too low. It needs to be at least 2.')
 end
 
 % Calculate the curves for band bending in the depletion area.
@@ -155,6 +155,12 @@ plot(potPlot_x2, potPlot_y2_cnd)
 plotOffset = E_val_plot(2) - potPlot_y2(potPlotResolution);
 potPlot_y2_val = potPlot_y2 + plotOffset;
 plot(potPlot_x2, potPlot_y2_val)
+
+% Connect the potential curves with vertical lines.
+plot([potPlot_x1(potPlotResolution) potPlot_x2(1)], ...
+	 [potPlot_y1_cnd(potPlotResolution) potPlot_y2_cnd(1)])
+plot([potPlot_x1(potPlotResolution) potPlot_x2(1)], ...
+	 [potPlot_y1_val(potPlotResolution) potPlot_y2_val(1)])
 
 % BEGIN DRAWING
 
