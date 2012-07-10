@@ -106,23 +106,48 @@ if potentialPlotResolution < 2
 	error('potentialPlotResolution is too low. It needs to be at least 2.')
 end
 
-% X-range for the first part is from the left end of the depletion area to the
-% center of the diagram.
-potPlot_x1 = (-1 * depletionWidth(1, 1)) : (depletionWidth(1, 1) / (potentialPlotResolution - 1)) : 0;
-% Calculate y-values based on those generated x-values.
-potPlot_y1 = calcVoltageCurve1(cc(1, 1), dielectric(1, 1), depletionWidth(1, 1), potPlot_x1);
-% Throw this onto a plot.
+% Calculate the curves for band bending in the depletion area.
+if E_fermi(1, 1) > E_fermi(1, 2)
+	% Material that acts like p-type is material 1.
+	
+	% X-range for the first part is from the left end of the depletion area to
+	% the center of the diagram.
+	potPlot_x1 = (-1 * depletionWidth(1, 1)) : (depletionWidth(1, 1) / (potentialPlotResolution - 1)) : 0;
+	% Calculate y-values based on those generated x-values.
+	potPlot_y1 = calcVoltageCurve1(cc(1, 1), dielectric(1, 1), depletionWidth(1, 1), potPlot_x1);
+	
+	% Repeat the procedure for the second half of the curve.
+	potPlot_x2 = 0 : (depletionWidth(1, 2) / (potentialPlotResolution - 1)) : depletionWidth(1, 2);
+	potPlot_y2 = calcVoltageCurve2(V_bi, V_a, cc(1, 2), dielectric(1, 2), depletionWidth(1, 2), potPlot_x2);
+
+else
+	% P-type actor is material 2.
+	% We multiply the y-values by -1 here because the q * N terms in the
+	% calcVoltageCurve() functions need to be multiplied by -1.
+	
+	% X-range for the first part is from the left end of the depletion area to
+	% the center of the diagram.
+	potPlot_x1 = (-1 * depletionWidth(1, 1)) : (depletionWidth(1, 1) / (potentialPlotResolution - 1)) : 0;
+	% Calculate y-values based on those generated x-values.
+	potPlot_y1 = -1 * calcVoltageCurve1(cc(1, 1), dielectric(1, 1), depletionWidth(1, 1), potPlot_x1);
+	
+	% Repeat the procedure for the second half of the curve.
+	potPlot_x2 = 0 : (depletionWidth(1, 2) / (potentialPlotResolution - 1)) : depletionWidth(1, 2);
+	potPlot_y2 = -1 * calcVoltageCurve2(V_bi, V_a, cc(1, 2), dielectric(1, 2), depletionWidth(1, 2), potPlot_x2);
+end
+
+% Throw the left half of the curve onto the plot.
 plotOffset = E_cnd_plot(1) - potPlot_y1(1);
-plot(potPlot_x1, potPlot_y1 + plotOffset)
+% Plot the curve with our calculated offset.
+potPlot_y1_cnd = potPlot_y1 + plotOffset;
+plot(potPlot_x1, potPlot_y1_cnd)
 % Future calls to plot() will go into the same figure.
 hold on
+% Calculate offset & plot.
 plotOffset = E_val_plot(1) - potPlot_y1(1);
 plot(potPlot_x1, potPlot_y1 + plotOffset)
 
-% Repeat the procedure for the second half of the curve.
-potPlot_x2 = 0 : (depletionWidth(1, 2) / (potentialPlotResolution - 1)) : depletionWidth(1, 2);
-potPlot_y2 = calcVoltageCurve2(V_bi, V_a, cc(1, 2), dielectric(1, 2), depletionWidth(1, 2), potPlot_x2);
-
+% Repeat procedure for the right half.
 plotOffset = E_cnd_plot(2) - potPlot_y2(potentialPlotResolution);
 plot(potPlot_x2, potPlot_y2 + plotOffset)
 plotOffset = E_val_plot(2) - potPlot_y2(potentialPlotResolution);
