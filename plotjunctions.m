@@ -99,10 +99,10 @@ deltaV(1, 2) = calcVoltageDrop1(V_bi, V_a, [cc(1, 2) cc(1, 1)], [dielectric(1, 2
 depletionWidth = calcDepletionWidth1(dielectric, deltaV, cc);
 
 % Number of samples to make when plotting voltage curves.
-potentialPlotResolution = 1000;
+potPlotResolution = 1000;
 % We need at least two points to draw a line. Also, a negative resolution does
 % not make sense.
-if potentialPlotResolution < 2
+if potPlotResolution < 2
 	error('potentialPlotResolution is too low. It needs to be at least 2.')
 end
 
@@ -112,12 +112,12 @@ if E_fermi(1, 1) > E_fermi(1, 2)
 	
 	% X-range for the first part is from the left end of the depletion area to
 	% the center of the diagram.
-	potPlot_x1 = (-1 * depletionWidth(1, 1)) : (depletionWidth(1, 1) / (potentialPlotResolution - 1)) : 0;
+	potPlot_x1 = (-1 * depletionWidth(1, 1)) : (depletionWidth(1, 1) / (potPlotResolution - 1)) : 0;
 	% Calculate y-values based on those generated x-values.
 	potPlot_y1 = calcVoltageCurve1(cc(1, 1), dielectric(1, 1), depletionWidth(1, 1), potPlot_x1);
 	
 	% Repeat the procedure for the second half of the curve.
-	potPlot_x2 = 0 : (depletionWidth(1, 2) / (potentialPlotResolution - 1)) : depletionWidth(1, 2);
+	potPlot_x2 = 0 : (depletionWidth(1, 2) / (potPlotResolution - 1)) : depletionWidth(1, 2);
 	potPlot_y2 = calcVoltageCurve2(V_bi, V_a, cc(1, 2), dielectric(1, 2), depletionWidth(1, 2), potPlot_x2);
 
 else
@@ -127,12 +127,12 @@ else
 	
 	% X-range for the first part is from the left end of the depletion area to
 	% the center of the diagram.
-	potPlot_x1 = (-1 * depletionWidth(1, 1)) : (depletionWidth(1, 1) / (potentialPlotResolution - 1)) : 0;
+	potPlot_x1 = (-1 * depletionWidth(1, 1)) : (depletionWidth(1, 1) / (potPlotResolution - 1)) : 0;
 	% Calculate y-values based on those generated x-values.
 	potPlot_y1 = -1 * calcVoltageCurve1(cc(1, 1), dielectric(1, 1), depletionWidth(1, 1), potPlot_x1);
 	
 	% Repeat the procedure for the second half of the curve.
-	potPlot_x2 = 0 : (depletionWidth(1, 2) / (potentialPlotResolution - 1)) : depletionWidth(1, 2);
+	potPlot_x2 = 0 : (depletionWidth(1, 2) / (potPlotResolution - 1)) : depletionWidth(1, 2);
 	potPlot_y2 = -1 * calcVoltageCurve2(V_bi, V_a, cc(1, 2), dielectric(1, 2), depletionWidth(1, 2), potPlot_x2);
 end
 
@@ -149,10 +149,10 @@ potPlot_y1_val = potPlot_y1 + plotOffset;
 plot(potPlot_x1, potPlot_y1_val)
 
 % Repeat procedure for the right half.
-plotOffset = E_cnd_plot(2) - potPlot_y2(potentialPlotResolution);
+plotOffset = E_cnd_plot(2) - potPlot_y2(potPlotResolution);
 potPlot_y2_cnd = potPlot_y2 + plotOffset;
 plot(potPlot_x2, potPlot_y2_cnd)
-plotOffset = E_val_plot(2) - potPlot_y2(potentialPlotResolution);
+plotOffset = E_val_plot(2) - potPlot_y2(potPlotResolution);
 potPlot_y2_val = potPlot_y2 + plotOffset;
 plot(potPlot_x2, potPlot_y2_val)
 
