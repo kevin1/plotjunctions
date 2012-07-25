@@ -189,8 +189,6 @@ plotOffset = E_cnd_plot(1) - potPlot_y1(1);
 % Plot the curve with our calculated offset.
 potPlot_y1_cnd = potPlot_y1 + plotOffset;
 plot(potPlot_x1, potPlot_y1_cnd, E_cnd_style)
-% Future calls to plot() will go into the same figure.
-hold on
 % Calculate offset & plot.
 plotOffset = E_val_plot(1) - potPlot_y1(1);
 potPlot_y1_val = potPlot_y1 + plotOffset;
