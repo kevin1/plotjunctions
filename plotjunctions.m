@@ -157,8 +157,8 @@ stop = depletionWidth(1, 2) + depletionTotal;
 % * 1/3 of the space for material 2
 width = stop - start;
 
-xrange(:, 1) = [start,                  start + 1 * (width/3) ];
-xrange(:, 2) = [start + 2 * (width/3),  stop                  ];
+xrange(:, 1) = [ start,                  start + 1 * (width/3) ];
+xrange(:, 2) = [ start + 2 * (width/3),  stop                  ];
 
 % MATLAB lets you specify a third argument in each set, which is a string that 
 % may specify line style, color, data markers, or some combination of those.
@@ -176,7 +176,6 @@ plot(...
 	xrange(:, 1), [E_cnd_plot(1, 1),   E_cnd_plot(1, 1)], E_cnd_style,    ...
 	xrange(:, 1), [E_fermi_plot(1, 1), E_fermi_plot(1, 1)], E_fermi_style ...
 )
-% Subsequent plot commands will modify the figure instead of replacing it.
 
 % Add material 2 to the figure
 plot(...
@@ -185,7 +184,7 @@ plot(...
 	xrange(:, 2), [E_fermi_plot(1, 2), E_fermi_plot(1, 2)], E_fermi_style ...
 )
 
-% Throw the left half of the curve onto the plot.
+% Throw the left half of the band bending curve onto the plot.
 plotOffset = E_cnd_plot(1) - potPlot_y1(1);
 % Plot the curve with our calculated offset.
 potPlot_y1_cnd = potPlot_y1 + plotOffset;
@@ -211,8 +210,11 @@ plot(...
 	[potPlot_y1_cnd(potPlotResolution) potPlot_y2_cnd(1)], ...
 	E_cnd_style...
 )
-plot([potPlot_x1(potPlotResolution) potPlot_x2(1)], ...
-	 [potPlot_y1_val(potPlotResolution) potPlot_y2_val(1)], E_val_style)
+plot(...
+	[potPlot_x1(potPlotResolution) potPlot_x2(1)], ...
+	[potPlot_y1_val(potPlotResolution) potPlot_y2_val(1)], ...
+	E_val_style ...
+)
 
 % Set window range
 % Rationale: MATLAB can do this automatically by setting the bounds to the
@@ -239,7 +241,7 @@ plot_ymax = ymax + ypad;
 % Set the window range
 axis([plot_xmin, plot_xmax, plot_ymin, plot_ymax])
 
-% labels
+% Add labels
 % Material names
 % Print them so that the x-values are in the middle of the flat area
 text(mean(xrange(:, 1)), ymax, names(1), ...
@@ -253,6 +255,7 @@ text(-1 * depletionWidth(1)/2, ymax, ...
 % For some reason, MATLAB will not let me display the same label twice here. (It
 % works in the material names code.) To get around it, we display '(same)' for
 % the second depletion width if the two are the same.
+% TODO: fix this shit
 if depletionWidth(1) ~= depletionWidth(2)
 	depletionWidth2Disp = num2str(depletionWidth(2) * 1e7, '%.1f nm');
 else
@@ -271,13 +274,13 @@ text(plot_xmin, plot_ymin, ...
 
 % Add x-axis label
 xlabel('Position (cm)')
-
 % Add y-axis label
 ylabel('Energy (eV)')
 
 end
 
 function N = calcDensityStates(M, kT)
+% TODO
 %CALCDENSITYSTATES Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -294,6 +297,8 @@ N = N / (100 ^ 3);
 end
 
 function E_f = calcFermiN(kT_eV, cc, N, E_cnd)
+% TODO: explain this function
+
 % Based on _Solid State Electronic Devices_, equation 3-15.
 % Assumes E_f < E_cnd by several kT_eV.
 % Note: In MATLAB, log() is the natural logarithm, not the common logarithm.
@@ -301,6 +306,8 @@ E_f = kT_eV .* log(cc ./ N) + E_cnd;	% n-type
 end
 
 function E_f = calcFermiP(kT_eV, cc, N, E_val)
+% TODO: explain this function
+
 % Based on _Solid State Electronic Devices_, equation 3-19.
 % Assumes E_f > E_val by several kT_eV.
 % Note: In MATLAB, log() is the natural logarithm, not the common logarithm.
@@ -308,14 +315,17 @@ E_f = E_val - kT_eV .* log(cc ./ N);	% p-type
 
 end
 
-% Returns the voltage drop on the side of the junction specified by index 1 in
-% N and Eps_r.
 function voltDrop = calcVoltageDrop1(V_bi, V_a, N, Eps_r)
+% CALCVOLTAGEDROP1 Returns the voltage drop on the side of the junction
+% specified by index 1 in N and Eps_r.
+
 % Based on "Heterostructure Fundamentals" Mark Lundstrom, equations 30 and 31.
 voltDrop = (V_bi - V_a) * ( (Eps_r(1, 2) * N(1, 2)) / (Eps_r(1, 1) * N(1, 1) + Eps_r(1, 2) * N(1, 2)) );
 end
 
 function depWidth = calcDepletionWidth1(Eps_r, V, N)
+% TODO: explain this function
+
 % From Wolfram|Alpha, query was "dielectric constant of vacuum in F/cm"
 % Electric constant in Farads / cm
 Eps_0 = 8.854e-14;
@@ -327,6 +337,8 @@ depWidth = sqrt( (2 * Eps_r .* Eps_0 .* V) ./ (q .* N) );
 end
 
 function V = calcVoltageCurve1(N, Eps_r, depletionWidth, x)
+% TODO: explain this function
+
 % From Wolfram|Alpha, query was "dielectric constant of vacuum in F/cm"
 % Electric constant in Farads / cm
 Eps_0 = 8.854e-14;
@@ -338,6 +350,8 @@ V = (q * N(1, 1)) / (2 * Eps_r * Eps_0) * (x + depletionWidth) .^ 2;
 end
 
 function V = calcVoltageCurve2(V_bi, V_a, N, Eps_r, depletionWidth, x)
+% TODO: explain this function
+
 % From Wolfram|Alpha, query was "dielectric constant of vacuum in F/cm"
 % Electric constant in Farads / cm
 Eps_0 = 8.854e-14;
