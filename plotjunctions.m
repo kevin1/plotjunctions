@@ -108,9 +108,9 @@ end
 
 % Calculate the curves for band bending in the depletion area.
 if E_fermi(1, 1) > E_fermi(1, 2)
-	% Material that acts like p-type is material 1.
-	i_actingP = 1;
-	i_actingN = 2;
+	% Material that acts like p-type is material 2.
+	i_actingP = 2;
+	i_actingN = 1;
 	
 	% X-range for the first part is from the left end of the depletion area to
 	% the center of the diagram.
@@ -123,9 +123,9 @@ if E_fermi(1, 1) > E_fermi(1, 2)
 	potPlot_y2 = calcVoltageCurve2(V_bi, V_a, cc(1, 2), dielectric(1, 2), depletionWidth(1, 2), potPlot_x2);
 
 else
-	% P-type actor is material 2.
-	i_actingP = 2;
-	i_actingN = 1;
+	% P-type actor is material 1.
+	i_actingP = 1;
+	i_actingN = 2;
 	
 	% We multiply the y-values by -1 here because the q * N terms in the
 	% calcVoltageCurve() functions need to be multiplied by -1.
