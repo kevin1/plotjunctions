@@ -1,4 +1,4 @@
-% plotjunctions: calculates and plots the energy of conduction and valence
+% PLOTJUNCTIONS: calculates and plots the energy of conduction and valence
 % bands, Fermi levels, and potentials.
 % All variables are 1D matricies with length of 2.
 % name        - Name for material, present for user convenience
@@ -7,7 +7,7 @@
 % cc          - Carrier concentration (cm^-3)
 % effectmass  - Effective mass, either Mp or Mn. (no units. don't include M_0)
 % type        - A string ('n' or 'p') to specity which type is in this element.
-% dielectric  - 
+% dielectric  - Relative dielectric constant
 function plotjunctions(names, E_ea, E_g, cc, effectmass, type, dielectric)
 % BEGIN CALCULATION
 

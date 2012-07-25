@@ -1,24 +1,12 @@
 function varargout = plotjunctions_gui(varargin)
 % PLOTJUNCTIONS_GUI MATLAB code for plotjunctions_gui.fig
-%      PLOTJUNCTIONS_GUI, by itself, creates a new PLOTJUNCTIONS_GUI or raises the existing
-%      singleton*.
-%
-%      H = PLOTJUNCTIONS_GUI returns the handle to a new PLOTJUNCTIONS_GUI or the handle to
-%      the existing singleton*.
-%
-%      PLOTJUNCTIONS_GUI('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in PLOTJUNCTIONS_GUI.M with the given input arguments.
-%
-%      PLOTJUNCTIONS_GUI('Property','Value',...) creates a new PLOTJUNCTIONS_GUI or raises the
-%      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before plotjunctions_gui_OpeningFcn gets called.  An
-%      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to plotjunctions_gui_OpeningFcn via varargin.
-%
-%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
-%      instance to run (singleton)".
-%
-% See also: GUIDE, GUIDATA, GUIHANDLES
+% 	PLOTJUNCTIONS_GUI() runs the frontend to PLOTJUNCTIONS. Running this
+% 	application in any other way is not supported.
+% 	
+% 	To update this application, stop it and run
+% 		system('git pull origin master');
+% 	
+% 	For help, contact Kevin Chen <kevinchen2003@gmail.com>.
 
 % Edit the above text to modify the response to help plotjunctions_gui
 
