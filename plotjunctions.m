@@ -141,32 +141,6 @@ else
 	potPlot_y2 = -1 * calcVoltageCurve2(V_bi, V_a, cc(1, 2), dielectric(1, 2), depletionWidth(1, 2), potPlot_x2);
 end
 
-% Throw the left half of the curve onto the plot.
-plotOffset = E_cnd_plot(1) - potPlot_y1(1);
-% Plot the curve with our calculated offset.
-potPlot_y1_cnd = potPlot_y1 + plotOffset;
-plot(potPlot_x1, potPlot_y1_cnd)
-% Future calls to plot() will go into the same figure.
-hold on
-% Calculate offset & plot.
-plotOffset = E_val_plot(1) - potPlot_y1(1);
-potPlot_y1_val = potPlot_y1 + plotOffset;
-plot(potPlot_x1, potPlot_y1_val)
-
-% Repeat procedure for the right half.
-plotOffset = E_cnd_plot(2) - potPlot_y2(potPlotResolution);
-potPlot_y2_cnd = potPlot_y2 + plotOffset;
-plot(potPlot_x2, potPlot_y2_cnd)
-plotOffset = E_val_plot(2) - potPlot_y2(potPlotResolution);
-potPlot_y2_val = potPlot_y2 + plotOffset;
-plot(potPlot_x2, potPlot_y2_val)
-
-% Connect the potential curves with vertical lines.
-plot([potPlot_x1(potPlotResolution) potPlot_x2(1)], ...
-	 [potPlot_y1_cnd(potPlotResolution) potPlot_y2_cnd(1)])
-plot([potPlot_x1(potPlotResolution) potPlot_x2(1)], ...
-	 [potPlot_y1_val(potPlotResolution) potPlot_y2_val(1)])
-
 % BEGIN DRAWING
 
 depletionTotal = sum(depletionWidth);
@@ -208,6 +182,35 @@ plot(...
 	xrange(:, 2), [E_cnd_plot(1, 2),   E_cnd_plot(1, 2)], ...
 	xrange(:, 2), [E_fermi_plot(1, 2), E_fermi_plot(1, 2)], E_fermi_style ...
 )
+
+% Throw the left half of the curve onto the plot.
+plotOffset = E_cnd_plot(1) - potPlot_y1(1);
+% Plot the curve with our calculated offset.
+potPlot_y1_cnd = potPlot_y1 + plotOffset;
+plot(potPlot_x1, potPlot_y1_cnd, E_cnd_style)
+% Future calls to plot() will go into the same figure.
+hold on
+% Calculate offset & plot.
+plotOffset = E_val_plot(1) - potPlot_y1(1);
+potPlot_y1_val = potPlot_y1 + plotOffset;
+plot(potPlot_x1, potPlot_y1_val, E_val_style)
+
+% Repeat procedure for the right half.
+plotOffset = E_cnd_plot(2) - potPlot_y2(potPlotResolution);
+potPlot_y2_cnd = potPlot_y2 + plotOffset;
+plot(potPlot_x2, potPlot_y2_cnd, E_cnd_style)
+plotOffset = E_val_plot(2) - potPlot_y2(potPlotResolution);
+potPlot_y2_val = potPlot_y2 + plotOffset;
+plot(potPlot_x2, potPlot_y2_val, E_val_style)
+
+% Connect the potential curves with vertical lines.
+plot(...
+	[potPlot_x1(potPlotResolution) potPlot_x2(1)], ...
+	[potPlot_y1_cnd(potPlotResolution) potPlot_y2_cnd(1)], ...
+	E_cnd_style...
+)
+plot([potPlot_x1(potPlotResolution) potPlot_x2(1)], ...
+	 [potPlot_y1_val(potPlotResolution) potPlot_y2_val(1)], E_val_style)
 
 % Set window range
 % Rationale: MATLAB can do this automatically by setting the bounds to the
