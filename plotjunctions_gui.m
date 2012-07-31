@@ -261,7 +261,7 @@ switch name
 		
 	case 'ZnO'
 		% http://ncem.lbl.gov/team/TEAM%20pubs/Acs%20Nano%202010%20Yuk.pdf
-		properties.E_ea = 4.45;
+		properties.E_ea = 4.29;
 		% http://maeresearch.ucsd.edu/mckittrick/index_files/Page945.htm
 		properties.E_g = 3.37;
 		% http://www.lamia.infm.it/transparent_electronics.htm#Zinc_oxides_
@@ -270,9 +270,8 @@ switch name
 		
 		switch type
 			case 'n'
-				% http://www.sciencedirect.com/science/article/pii/S0040609098014904
-				% For N > 1e+20 cm^-3
-				properties.effectmass = 0.5;
+				% http://www.sciencedirect.com/science/article/pii/S0921452601003659
+				properties.effectmass = 0.23;
 			case 'p'
 				% http://www.springermaterials.com/docs/info/10681719_269.html
 				% TODO: this value is for 1.6 K. Find room temperature.
@@ -302,7 +301,7 @@ switch name
 		end
 		
 		% http://www.clippercontrols.com/pages/Dielectric-Constant-Values.html
-		% 60 degrees Fahrenheith = 289 Kelvin
+		% 60 degrees Fahrenheit = 289 Kelvin
 		properties.dielectric = 18.1;
 end
 
