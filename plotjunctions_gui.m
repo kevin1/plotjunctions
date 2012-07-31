@@ -259,6 +259,50 @@ switch name
 		% _Solid State Electronic Devices_, appendix 3
 		properties.dielectric = 11.8;
 		
+	case 'ZnO'
+		% http://ncem.lbl.gov/team/TEAM%20pubs/Acs%20Nano%202010%20Yuk.pdf
+		properties.E_ea = 4.29;
+		% http://maeresearch.ucsd.edu/mckittrick/index_files/Page945.htm
+		properties.E_g = 3.37;
+		% http://www.lamia.infm.it/transparent_electronics.htm#Zinc_oxides_
+		% TODO: a range was provided
+		properties.cc = 1e+18;
+		
+		switch type
+			case 'n'
+				% http://www.sciencedirect.com/science/article/pii/S0921452601003659
+				properties.effectmass = 0.23;
+			case 'p'
+				% http://www.springermaterials.com/docs/info/10681719_269.html
+				% TODO: this value is for 1.6 K. Find room temperature.
+				properties.effectmass = 0.59;
+		end
+		
+		% http://www.asiinstr.com/technical/Dielectric%20Constants.htm#Section%20Z
+		properties.dielectric = 2.1;
+	
+	case 'Cu2O'
+		% http://onlinelibrary.wiley.com/doi/10.1002/pssc.200304245/abstract
+		properties.E_ea = 3.3;
+		% http://www.springermaterials.com/docs/info/10681727_62.html
+		% TODO: this is for 4.2 Kelvin
+		properties.E_g = 2.4;
+		% TODO: arbitrary value
+		properties.cc = 1e+18;
+		
+		switch type
+			case 'n'
+				% _Semiconductors: Data Handbook, 3rd. ed._ pg. 452
+				properties.effectmass = 0.99;
+			case 'p'
+				% _Semiconductors: Data Handbook, 3rd. ed._ pg. 452
+				% TODO: temperature for this is 1.7 Kelvin
+				properties.effectmass = 0.58;
+		end
+		
+		% http://www.clippercontrols.com/pages/Dielectric-Constant-Values.html
+		% 60 degrees Fahrenheit = 289 Kelvin
+		properties.dielectric = 18.1;
 end
 
 % --- Import the currently selected preset into a material form
