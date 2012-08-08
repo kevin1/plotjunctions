@@ -1,10 +1,16 @@
 classdef semiconductor < material
 	properties
+		% E_vac or E_0
 		vacuum;
+		% E_ea
 		electronAffinity;
+		% E_g
 		bandGap;
+		% p or n. (Ha ha. Sorry about that slide.)
 		carrierConcentration;
+		% M_p or M_n
 		effectiveMass;
+		% Eps_r
 		dielectric;
 	end
 	
@@ -33,7 +39,7 @@ classdef semiconductor < material
 			% TODO
 			%CALCDENSITYSTATES Summary of this function goes here
 			%   Detailed explanation goes here
-
+			
 			% Planck's constant, 6.63x10^-34 J-s, from _Solid State Electronic Devices_,
 			% page 40.
 			planck = 6.63e-34;

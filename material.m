@@ -1,7 +1,12 @@
 classdef material
 	properties
+		% Name of the material for user convenience.
 		name;
+		% 'p' = p type
+		% 'n' = n type
+		% 'm' = metal
 		typeCode;
+		% Temperature of the material for calculating kT.
 		temperature;
 	end
 	

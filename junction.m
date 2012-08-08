@@ -7,6 +7,7 @@ classdef junction
 	end
 	
 	methods (Abstract)
+		% Call this method to tell the junction to plot itself.
 		plot(obj)
 	end
 end

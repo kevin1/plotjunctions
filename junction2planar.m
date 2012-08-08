@@ -10,10 +10,14 @@ classdef junction2planar < junction2
 		end
 		
 		function plot(obj)
+			% Band bending on the side of material 1.
 			bends(:, 1) = transpose(obj.calcVoltageCurve(1, 1000));
+			% Ditto, material 2.
 			bends(:, 2) = transpose(obj.calcVoltageCurve(2, 1000));
+			% Calculate depletion width to know how big to draw band bending.
 			bendsSizes = [obj.calcDepletionWidth(1), obj.calcDepletionWidth(2)];
 			
+			% Tell plotter to make a pretty picture.
 			plotter.draw(plotjob(obj.materials, bends, bendsSizes));
 		end
 		
@@ -23,7 +27,8 @@ classdef junction2planar < junction2
 		end
 		
 		function voltDrop = calcVoltageDrop(obj, materialIndex)
-			% Based on "Heterostructure Fundamentals" Mark Lundstrom, equations 30 and 31.
+			% Information about both materials is required in this function, so
+			% we need to figure out which one is which based on the argument.
 			switch materialIndex
 				case 1
 					indexA = 2;
@@ -33,8 +38,11 @@ classdef junction2planar < junction2
 					indexB = 2;
 			end
 			
+			% For code brevity.
 			a = obj.materials(indexA);
 			b = obj.materials(indexB);
+			
+			% Based on "Heterostructure Fundamentals" Mark Lundstrom, equations 30 and 31.
 			voltDrop = (obj.calcVbi() - obj.V_a) * ( (b.dielectric * b.carrierConcentration) / (a.dielectric * a.carrierConcentration + b.dielectric * b.carrierConcentration) );
 		end
 		
