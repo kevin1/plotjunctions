@@ -42,22 +42,22 @@ classdef plotter
 					i_bulk = i_bulk + 1;
 				else
 					% Plotting band bending
-					xrange = [plotLocX, plotLocX + job.bandBendsSizes(i)];
+					xrange = [plotLocX, plotLocX + job.bandBendsSizes(i_bend)];
 					
 					% Generate x-values
 					xwidth = xrange(2) - xrange(1);
-					resolution = length(job.bandBends(:, i));
-					x = xrange(1) : xwidth / resolution : xrange(2);
-					x(length(x)) = [];
+					resolution = length(job.bandBends(:, i_bend))
+					xinterval = xwidth / resolution;
+					x = xrange(1) : xinterval : xrange(2) - xinterval;
 					
-					yraw = transpose(job.bandBends(:, i));
+					yraw = transpose(job.bandBends(:, i_bend));
 					
 					if mod(i, 3) == 2
-						errorCnd = bulkAligned(i).cnd - yraw(1);
-						errorVal = bulkAligned(i).val - yraw(1);
+						errorCnd = bulkAligned(i_bend).cnd - yraw(1);
+						errorVal = bulkAligned(i_bend).val - yraw(1);
 					else
-						errorCnd = bulkAligned(i).cnd - yraw(resolution);
-						errorVal = bulkAligned(i).val - yraw(resolution);
+						errorCnd = bulkAligned(i_bend).cnd - yraw(resolution);
+						errorVal = bulkAligned(i_bend).val - yraw(resolution);
 					end
 					
 					plot(...
@@ -94,5 +94,6 @@ classdef plotter
 				aligned(i).fermi = job.materials(i).calcFermi() + diff;
 			end
 		end
+		
 	end
 end
