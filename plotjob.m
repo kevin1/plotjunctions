@@ -19,11 +19,12 @@ classdef plotjob
 			dimBendSize = size(obj.bandBendsSizes);
 			
 			% All of the following statements must be true for the job to be valid.
-			isValid = ((dimMat(2) - 1) * 2 == dimBend(2) == dimBendSize(2));
+			% Number of materials specified by each matrix is consistent.
+			isValid = ((dimMat(2) - 1) * 2 == dimBend(2) & dimBend(2) == dimBendSize(2));
+			% There are at least two materials.
 			isValid = isValid & (dimMat(2) >= 2);
-			isValid = isValid & (dimMat(1) == dimBendSize(1) == 1);
-			%debug
-			isValid = true;
+			% Height of the matrix == 1.
+			isValid = isValid & (dimMat(1) == 1 & dimBendSize(1) == 1);
 		end
 		
 		function num = numMaterials(obj)
