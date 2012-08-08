@@ -10,8 +10,8 @@ classdef junction2planar < junction2
 		end
 		
 		function plot(obj)
-			bends(:, 1) = transpose(obj.calcVoltageCurve(1000));
-			bends(:, 2) = bends(:, 1);
+			bends(:, 1) = transpose(obj.calcVoltageCurve(1, 1000));
+			bends(:, 2) = transpose(obj.calcVoltageCurve(2, 1000));
 			bendsSizes = [obj.calcDepletionWidth(1), obj.calcDepletionWidth(2)];
 			
 			plotter.draw(plotjob(obj.materials, bends, bendsSizes));
@@ -49,48 +49,34 @@ classdef junction2planar < junction2
 			depWidth = sqrt( (2 * obj.materials(materialIndex).dielectric .* Eps_0 .* obj.calcVoltageDrop(materialIndex)) ./ (q .* obj.materials(materialIndex).carrierConcentration) );
 		end
 		
-		function curve = calcVoltageCurve(obj, resolution)
+		function y = calcVoltageCurve(obj, materialIndex, resolution)
 			% We need at least two points to draw a line. Also, a negative resolution does
 			% not make sense.
 			assert(resolution >= 2)
 			
-			% X-range for the first part is from the left end of the depletion area to
-			% the center of the diagram.
-			potPlot_x1 = (-1 * obj.calcDepletionWidth(1)) : (obj.calcDepletionWidth(1) / (resolution - 1)) : 0;
-			% Rinse and repeat.
-			potPlot_x2 = 0 : (obj.calcDepletionWidth(2) / (resolution - 1)) : obj.calcDepletionWidth(2);
-			
-			% Calculate the curves for band bending in the depletion area.
-			if obj.materials(1).calcFermi() > obj.materials(2).calcFermi()
-				% Material that acts like p-type is material 2.
-				i_actingP = 2;
-				i_actingN = 1;
-				
-				% Calculate y-values based on those generated x-values.
-				potPlot_y1 = obj.calcVoltageCurvePart(1, potPlot_x1);
-				
-				% Repeat the procedure for the second half of the curve.
-				potPlot_y2 = obj.calcVoltageCurvePart(2, potPlot_x2);
-				
-			else
-				% P-type actor is material 1.
-				i_actingP = 1;
-				i_actingN = 2;
-				
-				% We multiply the y-values by -1 here because the q * N terms in the
-				% calcVoltageCurve() functions need to be multiplied by -1.
-				
-				% Calculate y-values based on those generated x-values.
-				potPlot_y1 = -1 * obj.calcVoltageCurvePart(1, potPlot_x1);
-				
-				% Repeat the procedure for the second half of the curve.
-				potPlot_y2 = -1 * obj.calcVoltageCurvePart(2, potPlot_x2);
+			% Generate some x-values.
+			switch materialIndex
+				case 1
+					% X-range for the first part is from the left end of the depletion area to
+					% the center of the diagram.
+					x = (-1 * obj.calcDepletionWidth(1)) : (obj.calcDepletionWidth(1) / (resolution - 1)) : 0;
+				case 2
+					% Rinse and repeat.
+					x = 0 : (obj.calcDepletionWidth(2) / (resolution - 1)) : obj.calcDepletionWidth(2);
 			end
 			
-			curve = horzcat(potPlot_y1, potPlot_y2);
+			% Calculate some y-values from those x-values.
+			y = obj.calcVoltageCurveData(materialIndex, x);
+			
+			% If the p-type actor is materials 1
+			if obj.materials(1).calcFermi() < obj.materials(2).calcFermi()
+				% We multiply the y-values by -1 here because the q * N terms in the
+				% calcVoltageCurve() functions need to be multiplied by -1.
+				y = -1 * y;
+			end
 		end
 		
-		function V = calcVoltageCurvePart(obj, materialIndex, xvals)
+		function V = calcVoltageCurveData(obj, materialIndex, xvals)
 			% From Wolfram|Alpha, query was "dielectric constant of vacuum in F/cm"
 			% Electric constant in Farads / cm
 			Eps_0 = 8.854e-14;
@@ -106,7 +92,7 @@ classdef junction2planar < junction2
 					% Based on "Heterostructure Fundamentals" Mark Lundstrom, equation 24.
 					V = (obj.calcVbi() - obj.V_a) - (q * obj.materials(materialIndex).carrierConcentration) / (2 * obj.materials(materialIndex).dielectric * Eps_0) * (obj.calcDepletionWidth(materialIndex) - xvals) .^ 2;
 			end
-			
 		end
+		
 	end
 end

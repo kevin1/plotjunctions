@@ -7,7 +7,6 @@ classdef junction2 < junction
 		calcVbi(obj)
 		calcVoltageDrop(obj)
 		calcDepletionWidth(obj)
-		calcVoltageCurve(obj, resolution)
-		calcVoltageCurvePart(obj, materialIndex, xvals)
+		calcVoltageCurve(obj, materialIndex, resolution)
 	end
 end
