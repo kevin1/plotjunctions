@@ -32,6 +32,8 @@ classdef plotter
 			% handled by separate lists.)
 			i_bulk = 1;
 			i_bend = 1;
+			% Make a new figure for this to go into.
+			figure()
 			% For each section (bulk or bend) that needs to be plotted
 			for i = 1 : job.numMaterials() + length(job.bandBendsSizes)
 				% Assume x = mod(i, 3).

@@ -116,6 +116,11 @@ hold on
 % Make a pretty picture
 plotjunctions(names, E_ea, E_g, cc, effectmass, type, dielectric)
 
+a = semiconductor(names(1), type(1), 300, 0, E_ea(1), E_g(1), cc(1), effectmass(1), dielectric(1));
+b = semiconductor(names(2), type(2), 300, 0, E_ea(2), E_g(2), cc(2), effectmass(2), dielectric(2));
+junction = junction2planar(a, b);
+junction.plot()
+
 
 % --- Executes on selection change in popupmenu1.
 function popupmenu1_Callback(hObject, eventdata, handles)
