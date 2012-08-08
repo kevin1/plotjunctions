@@ -10,7 +10,11 @@ classdef junction2planar < junction2
 		end
 		
 		function plot(obj)
+			bends(:, 1) = transpose(obj.calcVoltageCurve(1000));
+			bends(:, 2) = bends(:, 1);
+			bendsSizes = [obj.calcDepletionWidth(1), obj.calcDepletionWidth(2)];
 			
+			plotter.draw(plotjob(obj.materials, bends, bendsSizes));
 		end
 		
 		function V_bi = calcVbi(obj)
