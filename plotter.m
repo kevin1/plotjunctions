@@ -116,8 +116,19 @@ classdef plotter
 				plotLocX = xrange(2);
 			end
 			
+			xlimits = xlim();
 			ylimits = ylim();
-			text(0, ylimits(1), ...
+			
+			padCoef = 0.2;
+			xpad = padCoef * (xlimits(2) - xlimits(1));
+			ypad = padCoef * (ylimits(2) - ylimits(1));
+			
+			axis([xlimits(1) - xpad, xlimits(2) + xpad, ...
+				ylimits(1) - ypad, ylimits(2) + ypad])
+			
+			xlimits = xlim();
+			ylimits = ylim();
+			text(xlimits(1), ylimits(1), ...
 				job.caption, ...
 				'VerticalAlignment', 'bottom')
 			
