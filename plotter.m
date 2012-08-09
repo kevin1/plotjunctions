@@ -10,10 +10,10 @@ classdef plotter
 			% Align the Fermi levels of the bulk areas.
 			bulkAligned = plotter.alignBulk(job);
 			
-			% Calibrate the width of the bulk area to be twice the width of the
-			% smallest band bending area.
-			widthBendCalib = min(job.bandBendsSizes);
-			widthBulk = widthBendCalib * 2;
+			% Calibrate the width of the bulk area to be the width of the
+			% biggest band bending area.
+			widthBendCalib = max(job.bandBendsSizes);
+			widthBulk = widthBendCalib;
 			
 			% MATLAB lets you specify a third argument in each set, which is a string that 
 			% may specify line style, color, data markers, or some combination of those.
