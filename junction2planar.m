@@ -16,9 +16,14 @@ classdef junction2planar < junction2
 			bends(:, 2) = transpose(obj.calcVoltageCurve(2, 1000));
 			% Calculate depletion width to know how big to draw band bending.
 			bendsSizes = [obj.calcDepletionWidth(1), obj.calcDepletionWidth(2)];
+			% Generate caption text.
+			% Built-in potential
+			caption{1} = sprintf('V_{bi}: %g V', obj.calcVbi());
+			% Maximum open circuit voltage
+			caption{2} = sprintf('Maximum V_{OC}: %g V', obj.materials(obj.getActorN).calcBandCnd() + (obj.materials(obj.getActorP()).calcFermi() - obj.materials(obj.getActorN()).calcFermi()) - obj.materials(obj.getActorP()).calcBandVal());
 			
 			% Tell plotter to make a pretty picture.
-			plotter.draw(plotjob(obj.materials, bends, bendsSizes));
+			plotter.draw(plotjob(obj.materials, bends, bendsSizes, caption));
 		end
 		
 		function V_bi = calcVbi(obj)
@@ -77,7 +82,7 @@ classdef junction2planar < junction2
 			y = obj.calcVoltageCurveData(materialIndex, x);
 			
 			% If the p-type actor is materials 1
-			if obj.materials(1).calcFermi() < obj.materials(2).calcFermi()
+			if obj.getActorP() == 1
 				% We multiply the y-values by -1 here because the q * N terms in the
 				% calcVoltageCurve() functions need to be multiplied by -1.
 				y = -1 * y;

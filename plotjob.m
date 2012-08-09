@@ -3,13 +3,15 @@ classdef plotjob
 		materials
 		bandBends
 		bandBendsSizes
+		caption
 	end
 	
 	methods
-		function obj = plotjob(materialsList, bandBendsList, bandBendsSizesList)
+		function obj = plotjob(materialsList, bandBendsList, bandBendsSizesList, captionText)
 			obj.materials = materialsList;
 			obj.bandBends = bandBendsList;
 			obj.bandBendsSizes = bandBendsSizesList;
+			obj.caption = captionText;
 		end
 		
 		function isValid = validate(obj)

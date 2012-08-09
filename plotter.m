@@ -115,6 +115,16 @@ classdef plotter
 				% Update the current plotting location.
 				plotLocX = xrange(2);
 			end
+			
+			ylimits = ylim();
+			text(0, ylimits(1), ...
+				job.caption, ...
+				'VerticalAlignment', 'bottom')
+			
+			% Add x-axis label
+			xlabel('Position (cm)')
+			% Add y-axis label
+			ylabel('Energy (eV)')
 		end
 		
 		function aligned = alignBulk(job)
