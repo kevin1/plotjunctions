@@ -87,10 +87,14 @@ classdef plotter
 					% Figure out which bulk we are aligning with.
 					if mod(i, 3) == 2
 						errorCnd = bulkAligned(i_bulk - 1).cnd - yraw(1);
+						lastCnd = yraw(resolution) + errorCnd;
 						errorVal = bulkAligned(i_bulk - 1).val - yraw(1);
+						lastVal = yraw(resolution) + errorVal;
 					else
 						errorCnd = bulkAligned(i_bulk).cnd - yraw(resolution);
 						errorVal = bulkAligned(i_bulk).val - yraw(resolution);
+						plot([xrange(1), xrange(1)], [lastCnd, yraw(1) + errorCnd], styleCnd)
+						plot([xrange(1), xrange(1)], [lastVal, yraw(1) + errorVal], styleVal)
 					end
 					
 					% Put it onto the plot.
