@@ -31,11 +31,11 @@ classdef junction2planar < junction2
 			% we need to figure out which one is which based on the argument.
 			switch materialIndex
 				case 1
-					indexA = 2;
-					indexB = 1;
-				case 2
 					indexA = 1;
 					indexB = 2;
+				case 2
+					indexA = 2;
+					indexB = 1;
 			end
 			
 			% For code brevity.
