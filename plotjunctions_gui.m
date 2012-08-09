@@ -1,10 +1,10 @@
 function varargout = plotjunctions_gui(varargin)
-% PLOTJUNCTIONS_GUI MATLAB code for plotjunctions_gui.fig
-% 	PLOTJUNCTIONS_GUI() runs the frontend to PLOTJUNCTIONS. Running this
-% 	application in any other way is not supported.
+% PLOTJUNCTIONS_GUI	The graphical frontend of the Plot Junctions application.
+% 	PLOTJUNCTIONS_GUI() opens the frontend of Plot Junctions. This function does
+% 	not take arguments.
 % 	
-% 	To update this application, stop it and run
-% 		system('git pull origin master');
+% 	To update this application from the Internet, stop it and run this command:
+% 		!git pull origin master
 % 	
 % 	For help, contact Kevin Chen <kevinchen2003@gmail.com>.
 
