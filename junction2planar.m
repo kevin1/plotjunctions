@@ -16,11 +16,10 @@ classdef junction2planar < junction2
 			bends(:, 2) = transpose(obj.calcVoltageCurve(2, 1000));
 			% Calculate depletion width to know how big to draw band bending.
 			bendsSizes = [obj.calcDepletionWidth(1), obj.calcDepletionWidth(2)];
-			% Generate caption text.
+			% Generate caption text. For multi-line captions, use a cell-array
+			% element for each line.
 			% Built-in potential
 			caption{1} = sprintf('V_{bi}: %g V', obj.calcVbi());
-			% Maximum open circuit voltage
-			caption{2} = sprintf('Maximum V_{OC}: %g V', obj.materials(obj.getActorN).calcBandCnd() + (obj.materials(obj.getActorP()).calcFermi() - obj.materials(obj.getActorN()).calcFermi()) - obj.materials(obj.getActorP()).calcBandVal());
 			
 			% Tell plotter to make a pretty picture.
 			plotter.draw(plotjob(obj.materials, bends, bendsSizes, caption));

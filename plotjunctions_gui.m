@@ -324,9 +324,6 @@ contents = cellstr(get(h_name,'String'));
 % Find the currently selected choice in the popup menu.
 name = contents{get(h_name, 'Value')};
 
-% Grab the handle of the object with tag 'np_select_import'
-h_type = handles.import_radio_n;
-
 % Find which type is selected in the radio buttons.
 type = n_or_p(handles.import_radio_n, handles.import_radio_p);
 
