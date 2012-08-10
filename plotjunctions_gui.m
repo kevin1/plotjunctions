@@ -109,16 +109,12 @@ dielectric = [str2double(get(handles.dielectric_edit_1, 'String')), ...
 type = [n_or_p(handles.material1_radio_n, handles.material1_radio_p), ...
 	n_or_p(handles.material2_radio_n, handles.material2_radio_p)];
 
-% Make a new figure
-figure()
-% Put future stuff into the figure
-hold on
-% Make a pretty picture
-plotjunctions(names, E_ea, E_g, cc, effectmass, type, dielectric)
-
+% Make new material objects.
 a = semiconductor(names(1), type(1), 300, 0, E_ea(1), E_g(1), cc(1), effectmass(1), dielectric(1));
 b = semiconductor(names(2), type(2), 300, 0, E_ea(2), E_g(2), cc(2), effectmass(2), dielectric(2));
+% Make junction object from material objects.
 junction = junction2planar(a, b);
+% Tell the junction object to plot.
 junction.plot()
 
 
